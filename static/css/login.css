@@ -1,0 +1,19 @@
+html {
+    background-color:
+}
+
+.heading {}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100vh;
+    background-image: url("../Images/Background_images/kai-oberhauser-BKAaLmT0tIs-unsplash.jpg");
+    background-size: cover;
+}
+
+form {
+    border: 0.1rem solid #f1f1f1;
+    background: transparent;
+}
+
+.img
