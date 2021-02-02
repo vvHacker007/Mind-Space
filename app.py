@@ -13,6 +13,7 @@ def redirect_to_home():
     return render_template("home.html")
 @app.route('/login/',methods=["POST","GET"])
 def login():
+    """
     if request.method == "POST":
         check_email = request.form["id"]
         check_password = request.form["pass"]
@@ -22,10 +23,12 @@ def login():
         else:
             return render_template("signup.html")
     else:
-        return render_template("login.html")
+        """
+    return render_template("login.html")
 
 @app.route('/signup/',methods=["POST","GET"])
 def signup():
+    """
     if request.method == "POST":
         name = request.form["name"]
         user_name = request.form["username"]
@@ -37,15 +40,13 @@ def signup():
         login_col.insert_one(mydict)
         return render_template("user.html")
     else:
-        return render_template("signup.html")
+        """
+    return render_template("signup.html")
         
 
 @app.route('/user/')
 def user():
     return render_template("user.html")
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

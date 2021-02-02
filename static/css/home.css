@@ -10338,7 +10338,7 @@ header.masthead h1 {
     color: #207178;
     text-align: center;
     font-size: 1.2em;
-    transition: all 1s;
+    transition: all 0s;
 }
 
 .search:hover {
