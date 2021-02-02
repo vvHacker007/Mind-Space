@@ -9,8 +9,8 @@ login_col = db.Login
 data = None
 
 @app.route('/')
-def redirect_to_login():
-    return redirect(url_for("login"))
+def redirect_to_home():
+    return render_template("home.html")
 @app.route('/login/',methods=["POST","GET"])
 def login():
     if request.method == "POST":

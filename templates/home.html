@@ -33,17 +33,16 @@
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#stats">Stats</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#stats">Stories</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" id="search-bar" href="#search">
-                                <form action="post" id="search-blog">
-                                    <input type="search" id="search-blog-input">
-                                    <i class="fa fa-search"></i>
+                            <div class="search_wrapper">
+                                <form class="search">
+                                    <input type="text" name="search_element" placeholder="Search..." class="search__field">
+                                    <button type="submit" class="fa fa-search"></button>
                                 </form>
-                            </a>
+                            </div>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -71,7 +70,7 @@
                         <h2 class="text-white mt-0">We've got what you need!</h2>
                         <hr class="divider light my-4" />
                         <p class="text-white-50 mb-4">Mind Space is a personalized Blogging webpage where you can share you thoughts freely.</p>
-                        <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
+                        <a class="btn btn-light btn-xl js-scroll-trigger" href="/login">Get Started!</a>
                     </div>
                 </div>
             </div>
@@ -113,7 +112,7 @@
                 </div>
             </div>
         </section>
-        <!-- stats-->
+        <!--Popular Stories-->
         <div id="stats">
             <div class="container-fluid p-0">
                 <div class="row no-gutters">
@@ -178,7 +177,7 @@
         <section class="page-section bg-dark text-white">
             <div class="container text-center">
                 <h2 class="mb-4">New to Blogging?</h2>
-                <a class="btn btn-light btn-xl" href="https://startbootstrap.com/theme/creative/">Sign Up Now!</a>
+                <a class="btn btn-light btn-xl" href="/signup">Sign Up Now!</a>
             </div>
         </section>
         <!-- Contact-->
