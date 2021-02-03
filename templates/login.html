@@ -54,18 +54,13 @@
                 <div class="card-footer">
                     <div class="d-flex justify-content-center links">
                         Don't have an account?<a href="/signup/" id="linking">Sign Up</a>
+                        <a href="/forgot_password/ " id="linking">Forgot your password?</a>
                     </div>
                     <div class="d-flex justify-content-center">
                         {% block content %} {% with messages = get_flashed_messages() %} {% if messages %} {% for msg in messages %}
                         <p style="color:rgb(104, 38, 26); text-align: center;">{{ msg }}</p>
                         {% endfor %} {% endif %} {% endwith %} {% endblock %}
                     </div>
-                    <div class="d-flex justify-content-center">
-                        {% block content %} {% if msg == "Invalid Password!" %}
-                        <p><a href="/forgot_password/ " id="linking">Forgot your password?</a></p> {% endif %} {% endblock %}
-                    </div>
-
-
                 </div>
             </div>
         </div>
