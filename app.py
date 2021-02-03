@@ -16,12 +16,13 @@ def login():
     if request.method == "POST":
         user_name = request.form["user_name"]
         password = request.form["pass"]
-        if login_col.find_one({'User Name': user_name}):
-            print("Found USER!!!!!!!!!!!!!!!!!!!!!!!!")
+        if login_col.find_one({'User Name': user_name,'Password': password}):
             return redirect(url_for("user", name_u = user_name))
         else:
-            print("NOT Found USER!!!!!!!!!!!!!!!!!!!!!!!!")
-            flash(f"Login Unsuccessfull")
+            if (login_col.find_one({'User Name': user_name})):
+                flash(f"Invalid Password!")
+            else:
+                flash(f"Invalid Username!")
             return render_template("login.html")
     
     else:
