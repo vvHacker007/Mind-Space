@@ -15,6 +15,7 @@ body {
 
 .card {
     height: relative;
+    width: relative;
     margin-top: auto;
     margin-bottom: auto;
     background-color: rgba(0, 0, 0, 0.5) !important;
@@ -84,9 +85,10 @@ input:focus {
 }
 
 #linking {
-    color: #207178;
+    text-align: center;
+    color: #b69d44;
 }
 
 #linking:hover {
-    color: #14bdcc;
+    color: #ffd94e;
 }

@@ -22,23 +22,15 @@ def login():
             if (login_col.find_one({'User Name': user_name})):
                 flash(f"Invalid Password!")
             else:
-                flash(f"Invalid Username!")
+                flash(f"Enter a valid Username!")
             return render_template("login.html")
     
     else:
         return render_template("login.html")
-    """
-    if request.method == "POST":
-        check_email = request.form["id"]
-        check_password = request.form["pass"]
-        data = login_col.find_one({ "Email": check_email, "Password": check_password })
-        if(data != None):
-            return redirect(url_for("user"))
-        else:
-            return render_template("signup.html")
-    else:
-        """
     
+@app.route('/forgot_password/',methods=["POST","GET"])
+def forgot_pass():
+    return render_template("forgot_password.html")
 
 @app.route('/signup/',methods=["POST","GET"])
 def signup():
