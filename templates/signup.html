@@ -25,48 +25,48 @@
                     <h3>Sign Up</h3>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST">
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Username" required>
+                            <input type="text" class="form-control" name="username" placeholder="Username" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Email-Id" required>
+                            <input type="text" class="form-control" name="emailid" placeholder="Email-Id" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-phone"></i></span>
                             </div>
-                            <input type="tel" class="form-control" placeholder="Phone No.">
+                            <input type="tel" class="form-control" name="phone" placeholder="Phone No.">
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <input type="password" class="form-control" placeholder="Password" required>
+                            <input type="password" class="form-control" name="pass" placeholder="Password" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <input type="password" class="form-control" placeholder="Confirm Password" required>
+                            <input type="password" class="form-control" name="confirm_pass" placeholder="Confirm Password" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <input type="date" class="form-control" placeholder="Birth Date">
+                            <input type="date" class="form-control" name="birthdate" placeholder="Birth Date">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Sign Up" class="btn float-right login_btn">
@@ -77,6 +77,11 @@
                     <div class="d-flex justify-content-center links">
                         Already have an account?<a href="/login/" id="linking">Log In</a>
                     </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    {% block content %} {% with messages = get_flashed_messages() %} {% if messages %} {% for msg in messages %}
+                    <p style="color:rgb(104, 38, 26); text-align: center;">{{ msg }}</p>
+                    {% endfor %} {% endif %} {% endwith %} {% endblock %}
                 </div>
             </div>
         </div>
