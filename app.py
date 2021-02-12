@@ -70,8 +70,6 @@ def signup():
         date1 = datetime.datetime(int(y),int(m),int(d))
         date2 = datetime.datetime(int(ty),int(tm),int(td))
         years = relativedelta(date2,date1).years
-        if phone != None:
-            phonenumbers.parse(phone,"")
 
         mydict = {"Name":name,"User Name":user_name,"Email":email,"Password":password,"Age":years,"Phone":phone}
         login_col.insert_one(mydict)
