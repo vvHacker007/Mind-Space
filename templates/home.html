@@ -36,12 +36,46 @@
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#stats">Stories</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
                         <li class="nav-item">
-                            <div class="search_wrapper">
-                                <form class="search">
-                                    <input type="text" name="search_element" placeholder="Search..." class="search__field">
-                                    <button type="submit" class="fa fa-search"></button>
-                                </form>
+                            <div class="search-box">
+                                <input type="text" placeholder="Search..">
+                                <div class="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="cancel-icon">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <div class="search-data">
+                                </div>
                             </div>
+                            <script>
+                                const searchBox = document.querySelector(".search-box");
+                                const searchBtn = document.querySelector(".search-icon");
+                                const cancelBtn = document.querySelector(".cancel-icon");
+                                const searchInput = document.querySelector("input");
+                                const searchData = document.querySelector(".search-data");
+                                searchBtn.onclick = () => {
+                                    searchBox.classList.add("active");
+                                    searchBtn.classList.add("active");
+                                    searchInput.classList.add("active");
+                                    cancelBtn.classList.add("active");
+                                    searchInput.focus();
+                                    if (searchInput.value != "") {
+                                        var values = searchInput.value;
+                                        searchData.classList.remove("active");
+                                        searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                    } else {
+                                        searchData.textContent = "";
+                                    }
+                                }
+                                cancelBtn.onclick = () => {
+                                    searchBox.classList.remove("active");
+                                    searchBtn.classList.remove("active");
+                                    searchInput.classList.remove("active");
+                                    cancelBtn.classList.remove("active");
+                                    searchData.classList.toggle("active");
+                                    searchInput.value = "";
+                                }
+                            </script>
                         </li>
                     </ul>
                 </div>

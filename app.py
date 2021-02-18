@@ -31,10 +31,10 @@ def login():
                 flash(f"Invalid Password!")
             else:
                 flash(f"Enter a valid Username!")
-            return render_template("login.html")
+            return render_template("login_2.html")
     
     else:
-        return render_template("login.html")
+        return render_template("login_2.html")
     
 @app.route('/forgot_password/',methods=["POST","GET"])
 def forgot_pass():
@@ -73,14 +73,14 @@ def signup():
 
         mydict = {"Name":name,"User Name":user_name,"Email":email,"Password":password,"Age":years,"Phone":phone}
         login_col.insert_one(mydict)
-        return render_template("login.html")
+        return render_template("login_2.html")
     else:
         return render_template("signup.html")
         
 
 @app.route('/<name_u>/')
 def user(name_u):
-    return render_template("user.html", name_u=name_u)
+    return render_template("user_home.html", name_u=name_u)
 
 if __name__ == '__main__':
     app.secret_key = "hsagfgfahg"
