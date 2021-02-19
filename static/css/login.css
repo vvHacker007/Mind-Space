@@ -34,19 +34,50 @@ body {
     color: black;
 }
 
-.fa-facebook-square:hover {
+.fa-facebook-square:active {
     color: #4267B2;
     cursor: pointer;
+    animation: myfirst 2s 1;
 }
 
-.fa-google-plus-square:hover {
+.fa-google-plus-square:active {
     color: #DB4437;
     cursor: pointer;
+    animation: mysecond 2s 1;
 }
 
-.fa-twitter-square:hover {
+.fa-twitter-square:active {
     color: #1DA1F2;
     cursor: pointer;
+    animation: mythird 1s 1;
+}
+
+@keyframes mythird {
+    100% {
+        color: #1DA1F2;
+    }
+}
+
+@keyframes myfirst {
+    100% {
+        color: #4267B2;
+        ;
+    }
+}
+
+@keyframes mysecond {
+    0% {
+        color: #DB4437;
+    }
+    25% {
+        color: #F4B400
+    }
+    75% {
+        color: #0F9D58
+    }
+    100% {
+        color: #4285F4;
+    }
 }
 
 .card-header h3 {

@@ -1,39 +1,87 @@
 @import url('https://fonts.googleapis.com/css?family=Numans');
 html,
 body {
-    background-image: url('../Images/Background_images/old-1130743_1920.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
     font-family: 'Numans', sans-serif;
 }
 
-.container {
+#particles-js {
+    position: absolute;
+    width: 100%;
     height: 100%;
+    z-index: 0;
+}
+
+.container {
+    max-height: 20vh;
+    max-width: -10vw;
     align-content: center;
 }
 
 .card {
     height: relative;
+    width: relative;
     margin-top: auto;
     margin-bottom: auto;
-    width: relative;
-    background-color: rgba(0, 0, 0, 0.5) !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .social_icon span {
     font-size: 60px;
     margin-left: 10px;
-    color: #b69d44;
+    color: black;
 }
 
-.social_icon span:hover {
-    color: white;
+.fa-facebook-square:active {
+    color: #4267B2;
     cursor: pointer;
+    animation: myfirst 2s 1;
+}
+
+.fa-google-plus-square:active {
+    color: #DB4437;
+    cursor: pointer;
+    animation: mysecond 2s 1;
+}
+
+.fa-twitter-square:active {
+    color: #1DA1F2;
+    cursor: pointer;
+    animation: mythird 1s 1;
+}
+
+@keyframes mythird {
+    100% {
+        color: #1DA1F2;
+    }
+}
+
+@keyframes myfirst {
+    100% {
+        color: #4267B2;
+        ;
+    }
+}
+
+@keyframes mysecond {
+    0% {
+        color: #DB4437;
+    }
+    25% {
+        color: #F4B400
+    }
+    75% {
+        color: #0F9D58
+    }
+    100% {
+        color: #4285F4;
+    }
 }
 
 .card-header h3 {
-    color: white;
+    color: black;
 }
 
 .social_icon {
@@ -44,7 +92,7 @@ body {
 
 .input-group-prepend span {
     width: 50px;
-    background-color: #b69d44;
+    background-color: black;
     color: black;
     border: 0 !important;
 }
@@ -55,7 +103,7 @@ input:focus {
 }
 
 .remember {
-    color: white;
+    color: black;
 }
 
 .remember input {
@@ -66,18 +114,18 @@ input:focus {
 }
 
 .login_btn {
-    color: black;
-    background-color: #b69d44;
+    color: whitesmoke;
+    background-color: black;
     width: 100px;
 }
 
 .login_btn:hover {
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: #171717;
 }
 
 .links {
-    color: white;
+    color: black;
 }
 
 .links a {
@@ -85,9 +133,78 @@ input:focus {
 }
 
 #linking {
-    color: #b69d44;
+    text-align: center;
+    color: #1a8917;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 #linking:hover {
-    color: #ffd94e;
+    color: #12660f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+input[type="checkbox"] {
+    position: relative;
+    opacity: 0;
+    z-index: -1;
+}
+
+label {
+    position: relative;
+    display: inline-block;
+    padding: 0 0 0 2em;
+    height: 1.5em;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+label::before,
+label::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+label::before {
+    content: " ";
+    border: 2px solid black;
+    border-radius: 30%;
+}
+
+input[type="checkbox"]+label::after {
+    content: '\2714 \fe0e';
+    color: white;
+    line-height: 1.5;
+    text-align: center;
+}
+
+input[type="checkbox"]:checked+label::before {
+    background: black;
+    border-color: black;
+}
+
+input[type="checkbox"]+label::after {
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+}
+
+input[type="checkbox"]:checked+label::after {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+}
+
+label::before,
+label::after {
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
 }

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <title>Mind Space-Signup</title>
     <link rel="stylesheet" href="../static/css/signup.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -14,57 +14,63 @@
     <!--Fontawesome CDN-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-    <title>Mind Space-Signup</title>
 </head>
 
 <body>
+    <!-- particles.js container -->
+    <div id="particles-js"></div>
     <div class="container">
         <div class="d-flex justify-content-center h-100">
             <div class="card">
                 <div class="card-header">
                     <h3>Sign Up</h3>
+                    <div class="d-flex justify-content-end social_icon">
+                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fab fa-google-plus-square"></i></span>
+                        <span><i class="fab fa-twitter-square"></i></span>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form method="POST">
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user" style="color:white"></i></span>
                             </div>
                             <input type="text" class="form-control" name="username" placeholder="Username" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                <span class="input-group-text"><i class="fa fa-envelope" style="color:white"></i></span>
                             </div>
                             <input type="text" class="form-control" name="emailid" placeholder="Email-Id" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                                <span class="input-group-text"><i class="fa fa-phone" style="color:white"></i></span>
                             </div>
                             <input type="tel" class="form-control" name="phone" placeholder="Phone No.">
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
                             </div>
                             <input type="password" class="form-control" name="pass" placeholder="Password" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
                             </div>
                             <input type="password" class="form-control" name="confirm_pass" placeholder="Confirm Password" required>
                         </div>
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                <span class="input-group-text"><i class="fa fa-calendar" style="color:white"></i></span>
                             </div>
                             <input type="date" class="form-control" name="birthdate" placeholder="Birth Date">
                         </div>
@@ -85,6 +91,12 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- particles.js lib - https://github.com/VincentGarreau/particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- stats.js lib -->
+    <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
+    <script src="../static/js/login_signup.js"></script>
 </body>
 
 </html>
