@@ -147,6 +147,7 @@ input:focus {
 
 input[type="checkbox"] {
     position: relative;
+    left: 0px;
     opacity: 0;
     z-index: -1;
 }
