@@ -32,7 +32,6 @@ def login():
             else:
                 flash(f"Enter a valid Username!")
             return render_template("login_2.html")
-    
     else:
         return render_template("login_2.html")
     
@@ -85,5 +84,4 @@ def user(name_u):
 if __name__ == '__main__':
     app.secret_key = "hsagfgfahg"
     app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)
