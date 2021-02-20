@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import Searchbox from "../../components/Searchbox"
 import makeExpanding from "../../components/expanding-animation"
