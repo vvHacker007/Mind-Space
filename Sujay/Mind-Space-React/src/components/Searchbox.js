@@ -1,8 +1,7 @@
 import React from "react"
 import { TextField, IconButton } from "material-ui"
 import SearchIcon from "material-ui/svg-icons/action/search"
-
-const Searchbox = ({ isOpen, onClick }) => {
+const SearchBox = ({ isOpen, onClick, additionalStyles }) => {
   const baseStyles = {
     open: {
       width: 300,
@@ -25,9 +24,21 @@ const Searchbox = ({ isOpen, onClick }) => {
       borderRadius: 5,
     },
   }
-  const textStyle = isOpen ? baseStyles.open : baseStyles.closed
-  const divStyle = Object.assign({}, textStyle, baseStyles.frame)
+
+  let textStyle = isOpen ? baseStyles.open : baseStyles.closed
+  textStyle = Object.assign(
+    textStyle,
+    additionalStyles ? additionalStyles.text : {}
+  )
+
+  const divStyle = Object.assign(
+    {},
+    textStyle,
+    baseStyles.frame,
+    additionalStyles ? additionalStyles.frame : {}
+  )
   divStyle.width += baseStyles.icon.width + 5
+
   return (
     <div style={divStyle}>
       <IconButton
@@ -41,4 +52,4 @@ const Searchbox = ({ isOpen, onClick }) => {
     </div>
   )
 }
-export default Searchbox
+export default SearchBox
