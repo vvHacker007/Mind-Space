@@ -84,6 +84,4 @@ def user(name_u):
 if __name__ == '__main__':
     app.secret_key = "only20dollarsinmypocket"
     app.jinja_env.auto_reload = True
-    app.config['TESTING'] = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)
