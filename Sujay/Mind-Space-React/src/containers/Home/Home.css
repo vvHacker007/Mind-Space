@@ -28,105 +28,20 @@ li {
   display: inline;
   padding: 1rem;
 }
-
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-::selection {
-    color: #fff;
-    background: black;
+.home-head {
+  /* background: url(./home.jpg) no-repeat center center fixed; */
+  background: linear-gradient(
+      to bottom,
+      rgba(92, 77, 66, 0.8) 0%,
+      rgba(92, 77, 66, 0.8) 100%
+    ),
+    url(./home.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  height: 100vh;
 }
 
-.search-box {
-    position: relative;
-    height: 35px;
-    width: 35px;
-    border-radius: 50%;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.search-box.active {
-    width: 180px;
-}
-
-.search-box input {
-    width: 98%;
-    height: 100%;
-    position: relative;
-    top: 90%;
-    border: none;
-    border-radius: 50px;
-    background: transparent;
-    outline: none;
-    padding: 0 60px 0 20px;
-    font-size: 18px;
-    opacity: 0;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.search-box input.active {
-    opacity: 1;
-}
-
-.search-box input::placeholder {
-    color: Black;
-}
-
-.search-box .search-icon {
-    position: absolute;
-    right: 0px;
-    top: 138%;
-    transform: translateY(-50%);
-    height: 35px;
-    width: 35px;
-    background: transparent;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 35px;
-    font-size: 1em;
-    color: Black;
-    cursor: pointer;
-    z-index: 1;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.search-box .search-icon.active {
-    right: 5px;
-    height: 35px;
-    line-height: 35px;
-    width: 35px;
-    font-size: 1em;
-    background: transparent;
-    color: black;
-    transform: translateY(-50%) rotate(360deg);
-}
-
-.search-box .cancel-icon {
-    position: absolute;
-    right: 15px;
-    top: 138%;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: transparent;
-    cursor: pointer;
-    transition: all 0.5s 0.2s cubic-bezier(0.68, -0.35, 0.265, 1.55);
-}
-
-.search-box .cancel-icon.active {
-    right: -30px;
-    transform: translateY(-50%) rotate(360deg);
-    color: black;
-}
-
-.search-box .search-data {
-    text-align: center;
-    padding-top: 3.2rem;
-    color: #fff;
-    font-size: 18px;
-    word-wrap: break-word;
-}
-
-.search-box .search-data.active {
-    display: none;
-}
 @media (orientation: portrait) {
-  
 }
