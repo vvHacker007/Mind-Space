@@ -1,17 +1,19 @@
 import React, { Component } from "react"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import Searchbox from "../../components/Searchbox"
-import makeExpanding from "../../components/expanding-animation"
-// import Stats from "../../components/Stats"
-// import Category from "../../components/Category"
-// import Complaint from "../../components/Complaint"
-// import Login from "../../components/Login"
-// import Logout from "../../components/Logout"
 import "./Home.css"
 
-const ExpandingSearchBox = makeExpanding(Searchbox)
-
+const animationStyle = {
+  transition: "width 0.75s cubic-bezier(0.000, 0.795, 0.000, 1.000)",
+}
 class Home extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { isOpen: false }
+  }
+  onClick = () => {
+    this.setState({ isOpen: !this.state.isOpen })
+  }
   render() {
     return (
       <div className="home">
@@ -58,7 +60,15 @@ class Home extends Component {
                 </li>
                 <li class="nav-item">
                   <MuiThemeProvider>
-                    <ExpandingSearchBox />
+                    <Searchbox
+                      {...this.state}
+                      isOpen={this.state.isOpen}
+                      onClick={this.onClick}
+                      additionalStyles={{
+                        text: animationStyle,
+                        frame: animationStyle,
+                      }}
+                    />
                   </MuiThemeProvider>
                 </li>
               </ul>
