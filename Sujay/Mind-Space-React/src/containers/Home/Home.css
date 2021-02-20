@@ -1,0 +1,132 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center;
+  padding: 0.7rem 2rem;
+  overflow: hidden;
+  z-index: 1;
+  width: 88.15%;
+  margin: auto;
+  top: 0;
+  border-bottom: solid 1px var(--primary-color);
+  opacity: 0.9;
+  top: 0;
+  box-shadow: 12px 0 15px -4px rgba(31, 73, 125, 0.8),
+    -12px 0 8px -4px rgba(31, 73, 125, 0.8);
+  box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white,
+    12px 0 15px -4px rgba(31, 73, 125, 0.8),
+    -12px 0 15px -4px rgba(31, 73, 125, 0.8); */
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  display: inline;
+  padding: 1rem;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+::selection {
+    color: #fff;
+    background: black;
+}
+
+.search-box {
+    position: relative;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.search-box.active {
+    width: 180px;
+}
+
+.search-box input {
+    width: 98%;
+    height: 100%;
+    position: relative;
+    top: 90%;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    outline: none;
+    padding: 0 60px 0 20px;
+    font-size: 18px;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.search-box input.active {
+    opacity: 1;
+}
+
+.search-box input::placeholder {
+    color: Black;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    right: 0px;
+    top: 138%;
+    transform: translateY(-50%);
+    height: 35px;
+    width: 35px;
+    background: transparent;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 35px;
+    font-size: 1em;
+    color: Black;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.search-box .search-icon.active {
+    right: 5px;
+    height: 35px;
+    line-height: 35px;
+    width: 35px;
+    font-size: 1em;
+    background: transparent;
+    color: black;
+    transform: translateY(-50%) rotate(360deg);
+}
+
+.search-box .cancel-icon {
+    position: absolute;
+    right: 15px;
+    top: 138%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: transparent;
+    cursor: pointer;
+    transition: all 0.5s 0.2s cubic-bezier(0.68, -0.35, 0.265, 1.55);
+}
+
+.search-box .cancel-icon.active {
+    right: -30px;
+    transform: translateY(-50%) rotate(360deg);
+    color: black;
+}
+
+.search-box .search-data {
+    text-align: center;
+    padding-top: 3.2rem;
+    color: #fff;
+    font-size: 18px;
+    word-wrap: break-word;
+}
+
+.search-box .search-data.active {
+    display: none;
+}
+@media (orientation: portrait) {
+  
+}
