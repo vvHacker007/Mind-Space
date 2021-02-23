@@ -39,7 +39,7 @@ def login():
 def forgot_pass():
     return render_template("forgot_password.html")
 
-@app.route('/signup/',methods=["POST","GET"])
+@app.route('/signup/',methds=["POST","GET"])
 def signup():
     if request.method == "POST":
         user_name = request.form["username"]
