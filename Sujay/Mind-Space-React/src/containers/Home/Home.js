@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import Searchbox from "../../components/Searchbox"
 import "./Home.css"
+import Navbar from "./Navbar.js"
 
 const animationStyle = {
   transition: "width 0.75s cubic-bezier(0.000, 0.795, 0.000, 1.000)",
@@ -17,7 +18,7 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-        <nav
+        {/* <nav
           class="navbar navbar-expand-lg navbar-light fixed-top py-3"
           id="mainNav"
         >
@@ -74,7 +75,8 @@ class Home extends Component {
               </ul>
             </div>
           </div>
-        </nav>
+        </nav> */}
+        <Navbar />
         <div className="home-head">
           <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center text-center">

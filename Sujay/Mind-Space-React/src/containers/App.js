@@ -8,7 +8,7 @@ function App() {
     <Router>
       <main>
       <Switch>
-        <Route path="/" exact component={Home} />
+          <Route path="/" exact component={Home} />
         {/* <Route component={Error} /> */}
       </Switch>
     </main>
