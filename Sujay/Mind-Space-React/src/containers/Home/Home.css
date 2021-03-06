@@ -20,7 +20,7 @@ li {
 }
 .home-head {
   /* background: url(./home.jpg) no-repeat center center fixed; */
-  padding-top: 4rem;
+  padding-top: 2rem;
   padding-bottom: calc(10rem - 4.5rem);
   background: linear-gradient(
       to bottom,
@@ -32,7 +32,7 @@ li {
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: cover;
-  height: 100vh;
+  height: 150vh;
 }
 .container {
   text-align: center;
