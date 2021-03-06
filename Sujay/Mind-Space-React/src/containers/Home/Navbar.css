@@ -1,11 +1,20 @@
 /*Desktop View*/
+body {
+  background: none;
+  font-family: Roboto, "Arial";
+}
+
 .header {
   display: flex;
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   justify-content: space-between;
   align-items: center;
   padding: 0px 40px;
   height: 80px;
+}
+a {
+  color: rgb(207, 206, 204);
+  text-decoration: none;
 }
 .logo-nav {
   display: flex;
@@ -24,7 +33,7 @@
 .nav-options {
   padding-left: 25px;
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
   grid-gap: 50px;
   list-style-type: none;
 }
@@ -33,7 +42,7 @@
 }
 
 .option :hover {
-  /* color: white; */
+  color: white;
 }
 .signin-up {
   display: flex;
