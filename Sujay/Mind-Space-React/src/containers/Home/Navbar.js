@@ -14,6 +14,7 @@ const Navbar = () => {
         <div className="logo-container">
           <a href="#">
             <Logo className="logo" />
+            <p>Mind Space</p>
           </a>
         </div>
         <ul className={click ? "nav-options active" : "nav-options"}>
@@ -21,13 +22,13 @@ const Navbar = () => {
             <a href="#">ABOUT</a>
           </li>
           <li className="option" onClick={closeMobileMenu}>
-            <a href="#">CONTACT</a>
+            <a href="#">SERVICES</a>
           </li>
           <li className="option" onClick={closeMobileMenu}>
-            <a href="#">BLOG</a>
+            <a href="#">STORIES</a>
           </li>
-          <li className="option mobile-option" onClick={closeMobileMenu}>
-            <a href="#">SIGN-IN</a>
+          <li className="option" onClick={closeMobileMenu}>
+            <a href="#">CONTACT</a>
           </li>
           <li className="option mobile-option" onClick={closeMobileMenu}>
             <a href="" className="sign-up">
@@ -37,9 +38,6 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="signin-up">
-        <li className="sign-in" onClick={closeMobileMenu}>
-          <a href="#">SIGN-IN</a>
-        </li>
         <li onClick={closeMobileMenu}>
           <a href="" className="signup-btn">
             SIGN-UP
