@@ -27,7 +27,7 @@ const Navbar = () => {
           <li className="option" onClick={closeMobileMenu}>
             <a href="#">STORIES</a>
           </li>
-          <li className="option mobile-option" onClick={closeMobileMenu}>
+          <li className="option" onClick={closeMobileMenu}>
             <a href="#">CONTACT</a>
           </li>
           <li className="option mobile-option" onClick={closeMobileMenu}>
@@ -38,9 +38,6 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="signin-up">
-        <li className="sign-in" onClick={closeMobileMenu}>
-          <a href="#">CONTACT</a>
-        </li>
         <li onClick={closeMobileMenu}>
           <a href="" className="signup-btn">
             SIGN-UP

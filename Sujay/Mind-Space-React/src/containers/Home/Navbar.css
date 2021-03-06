@@ -31,7 +31,7 @@ a {
   height: 45px;
 }
 .nav-options {
-  padding-left: 25px;
+  padding-left: 40vw;
   display: grid;
   grid-template-columns: repeat(4, auto);
   grid-gap: 50px;
@@ -91,7 +91,9 @@ a {
     grid-gap: 0px;
   }
   .nav-options.active {
-    background: #9899d1;
+    margin-top: 9vw;
+    height: 100vh;
+    background: #773108;
     left: 0;
     opacity: 1;
     transition: all 0.5s ease;

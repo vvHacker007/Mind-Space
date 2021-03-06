@@ -82,7 +82,7 @@ class Home extends Component {
           <div class="container">
             <h1>MIND SPACE</h1>
             <p>A mint of creativity...</p>
-            <button>Find out more</button>
+            <button>FIND OUT MORE</button>
           </div>
         </div>
       </div>
