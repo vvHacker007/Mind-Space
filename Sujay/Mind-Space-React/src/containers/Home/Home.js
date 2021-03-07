@@ -15,6 +15,7 @@ class Home extends Component {
   onClick = () => {
     this.setState({ isOpen: !this.state.isOpen })
   }
+
   render() {
     return (
       <div className="home">

@@ -74,6 +74,7 @@ a {
   /*Mobile View */
   .header {
     padding: 0px 10px;
+    width: 100vw;
   }
   .logo {
     width: 45px;
@@ -132,6 +133,7 @@ a {
 }
 .mobile-menu {
   display: block;
+  margin-right: 10%;
 }
 
 .brand {
