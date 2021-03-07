@@ -1,13 +1,17 @@
-import React, { useState } from "react"
+import React, { useState, Component } from "react"
 import { ReactComponent as CloseMenu } from "./x.svg"
 import { ReactComponent as MenuIcon } from "./menu.svg"
 import { ReactComponent as Logo } from "./logo.svg"
 import "./Navbar.css"
+// import { render } from "@testing-library/react"
+
+
 
 const Navbar = () => {
   const [click, setClick] = useState(false)
   const handleClick = () => setClick(!click)
   const closeMobileMenu = () => setClick(false)
+
   return (
     <div className="header">
       <div className="logo-nav">
