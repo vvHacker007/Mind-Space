@@ -5,6 +5,7 @@ body {
 }
 
 .header {
+  position: fixed;
   display: flex;
   background: transparent;
   justify-content: space-between;
@@ -43,6 +44,7 @@ a {
 
 .option :hover {
   color: white;
+  font-style: bold;
 }
 .signin-up {
   display: flex;
