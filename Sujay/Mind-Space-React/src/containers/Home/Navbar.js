@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="logo-container">
           <a href="#">
             <Logo className="logo" />
-            <p>Mind Space</p>
+            <p className="brand">Mind Space</p>
           </a>
         </div>
         <ul className={click ? "nav-options active" : "nav-options"}>
