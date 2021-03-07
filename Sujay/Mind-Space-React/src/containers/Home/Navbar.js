@@ -1,11 +1,8 @@
 import React, { useState, Component } from "react"
 import { ReactComponent as CloseMenu } from "./x.svg"
 import { ReactComponent as MenuIcon } from "./menu.svg"
-import { ReactComponent as Logo } from "./logo.svg"
 import "./Navbar.css"
 // import { render } from "@testing-library/react"
-
-
 
 const Navbar = () => {
   const [click, setClick] = useState(false)
@@ -17,7 +14,6 @@ const Navbar = () => {
       <div className="logo-nav">
         <div className="logo-container">
           <a href="#">
-            <Logo className="logo" />
             <p className="brand">Mind Space</p>
           </a>
         </div>
@@ -42,7 +38,7 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="signin-up">
-        <li onClick={closeMobileMenu}>
+        <li className="sign-up-item" onClick={closeMobileMenu}>
           <a href="" className="signup-btn">
             SIGN-UP
           </a>

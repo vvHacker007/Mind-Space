@@ -32,10 +32,10 @@ a {
   height: 60px;
 }
 .nav-options {
-  padding-left: 40vw;
+  padding-left: 50vw;
   display: grid;
   grid-template-columns: repeat(5, auto);
-  grid-gap: -5px;
+  /* grid-gap: -5px; */
   list-style-type: none;
 }
 .mobile-option {
@@ -51,14 +51,18 @@ a {
   padding: 0px 0px;
   list-style-type: none;
 }
-.sign-in {
+/* .sign-in {
   padding-right: 50px;
   align-self: center;
 }
 .sign-in :hover {
-  /* color: white; */
+  color: white;
+} */
+.sign-up-item {
+  width: 6rem;
 }
 .signup-btn {
+  width: 10rem;
   padding: 10px 10px;
   height: 2.4rem;
   border-radius: 3px;
