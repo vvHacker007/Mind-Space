@@ -120,6 +120,10 @@ a {
     height: 10vw;
     padding: 30px 0px;
   }
+  .option :hover {
+    color: black;
+    font-style: bold;
+  }
   .sign-up {
     background: #171717;
     border-radius: 3px;

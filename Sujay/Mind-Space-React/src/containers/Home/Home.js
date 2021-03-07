@@ -21,11 +21,19 @@ class Home extends Component {
       <div className="home">
         <div className="home-head">
           <Navbar />
-          <div class="container">
+          <div class="home-container">
             <h1>MIND SPACE</h1>
             <p>A mint of creativity...</p>
             <button>FIND OUT MORE</button>
           </div>
+        </div>
+        <div id="about">
+          <h2>We've got what you need!</h2>
+          <p>
+            Mind Space is a personalized Blogging webpage where you can share
+            you thoughts freely.
+          </p>
+          <button>Log In</button>
         </div>
       </div>
     )
