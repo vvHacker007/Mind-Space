@@ -73,7 +73,9 @@ li {
   color: white;
   font-size: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
+  margin-left: 13vw;
+  margin-right: 13vw;
 }
 #about p {
   font-style: italic;

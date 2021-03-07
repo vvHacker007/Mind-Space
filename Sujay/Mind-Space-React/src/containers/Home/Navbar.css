@@ -13,6 +13,17 @@ body {
   padding: 0px 40px;
   height: 80px;
 }
+
+.header.active {
+  background: white;
+  margin-top: -8vh;
+  width: 100vw;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+}
+.header.active a::hover {
+  color: black;
+}
 a {
   color: #171717;
   text-decoration: none;
@@ -44,6 +55,10 @@ a {
 
 .option :hover {
   color: white;
+  font-style: bold;
+}
+.option.active :hover {
+  color: black;
   font-style: bold;
 }
 .signin-up {
@@ -120,10 +135,7 @@ a {
     height: 10vw;
     padding: 30px 0px;
   }
-  .option :hover {
-    color: black;
-    font-style: bold;
-  }
+
   .sign-up {
     background: #171717;
     border-radius: 3px;

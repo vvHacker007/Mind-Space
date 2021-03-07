@@ -6,11 +6,20 @@ import "./Navbar.css"
 
 const Navbar = () => {
   const [click, setClick] = useState(false)
+  const [navbar, setNavbar] = useState(false)
   const handleClick = () => setClick(!click)
   const closeMobileMenu = () => setClick(false)
+  const changeBackground = () => {
+    if (window.scrollY >= 711) {
+      setNavbar(true)
+    } else {
+      setNavbar(false)
+    }
+  }
+  window.addEventListener("scroll", changeBackground)
 
   return (
-    <div className="header">
+    <div className={navbar ? "header active" : "header"}>
       <div className="logo-nav">
         <div className="logo-container">
           <a href="#">
@@ -18,16 +27,28 @@ const Navbar = () => {
           </a>
         </div>
         <ul className={click ? "nav-options active" : "nav-options"}>
-          <li className="option" onClick={closeMobileMenu}>
+          <li
+            className={navbar ? "option active" : "option"}
+            onClick={closeMobileMenu}
+          >
             <a href="#">ABOUT</a>
           </li>
-          <li className="option" onClick={closeMobileMenu}>
+          <li
+            className={navbar ? "option active" : "option"}
+            onClick={closeMobileMenu}
+          >
             <a href="#">SERVICES</a>
           </li>
-          <li className="option" onClick={closeMobileMenu}>
+          <li
+            className={navbar ? "option active" : "option"}
+            onClick={closeMobileMenu}
+          >
             <a href="#">STORIES</a>
           </li>
-          <li className="option" onClick={closeMobileMenu}>
+          <li
+            className={navbar ? "option active" : "option"}
+            onClick={closeMobileMenu}
+          >
             <a href="#">CONTACT</a>
           </li>
           <li className="option mobile-option" onClick={closeMobileMenu}>
