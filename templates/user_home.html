@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:1000,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:1000,1000,1000italic,1000italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- Third party plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+    <!---Search Bar-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <title>Mind Space - {{ user }}</title>
+    <!-- Core theme CSS -->
+    <link href="../static/css/user_home.css" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+    <div class="navigation">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="#page-top">Mind Space</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item">
+                            <div class="search-box">
+                                <input type="text" placeholder="Search...">
+                                <div class="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="cancel-icon">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <div class="search-data">
+                                </div>
+                            </div>
+                            <script>
+                                const searchBox = document.querySelector(".search-box");
+                                const searchBtn = document.querySelector(".search-icon");
+                                const cancelBtn = document.querySelector(".cancel-icon");
+                                const searchInput = document.querySelector("input");
+                                const searchData = document.querySelector(".search-data");
+                                searchBtn.onclick = () => {
+                                    searchBox.classList.add("active");
+                                    searchBtn.classList.add("active");
+                                    searchInput.classList.add("active");
+                                    cancelBtn.classList.add("active");
+                                    searchInput.focus();
+                                    if (searchInput.value != "") {
+                                        var values = searchInput.value;
+                                        searchData.classList.remove("active");
+                                        searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                    } else {
+                                        searchData.textContent = "";
+                                    }
+                                }
+                                cancelBtn.onclick = () => {
+                                    searchBox.classList.remove("active");
+                                    searchBtn.classList.remove("active");
+                                    searchInput.classList.remove("active");
+                                    cancelBtn.classList.remove("active");
+                                    searchData.classList.toggle("active");
+                                    searchInput.value = "";
+                                }
+                            </script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--Masthead-->
+        <header class="masthead">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h1 class="text-uppercase text-white font-weight-bold">Mind Space</h1>
+                        <hr class="divider my-4" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 font-weight-light ml-5">A mint of Creativity...</p>
+                        <a class="btn btn-primary btn-xl" href="#blogs">Find Out More</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!--Blogs-->
+        <section class="page-section bg-primary" id="blogs">
+            <h2 style="margin-left:18vw;"><b>HELLO {{ user }}</b></h2>
+            <div class="container-card">
+                {% for post in posts %}
+                <div class="div-card">
+                    <div class="img-title">
+                        <h3><b>{{ post.title }}</b></h3>
+                        <img src="../static/Images/Background_images/breno-machado-in9-n0JwgZ0-unsplash.jpg">
+                    </div>
+                    <div class="summary-text">
+                        <p>{{ post.content }}</p>
+                        <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.author }}</small>
+                            <br>
+                        <small class="text-muted"style="margin-right:15vw;">{{ post.date_posted }}</small></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../static/js/home.js"></script>
+</body>
+
+</html>

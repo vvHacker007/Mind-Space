@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- particles.js container -->
+<div id="particles-js"></div>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3>Verification</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
+                        </div>
+                        {{ form.otp(class="form-control", placeholder="Enter OTP") }}
+                        <!-- <input type="text" class="form-control" name="username" placeholder="Username" required> -->
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.submit(class="btn float-right login_btn") }}
+                        <!-- <input type="submit" value="Sign Up" class="btn float-right login_btn"> -->
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Already have an account?<a href="{{ url_for('login') }}" id="linking">Log In</a>
+                </div>
+            </div>
+            <div>
+                {% if form.otp.errors%}
+                    {% for error in form.otp.errors %}
+                    <p class="flash-alert-danger">{{ error }}</p>
+                    {% endfor %} 
+                {% else %}
+                {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                <p class="flash-alert-{{ category }}">{{ msg }}</p>
+                {% endfor %} {% endif %} {% endwith %} {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

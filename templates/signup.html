@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- particles.js container -->
+<div id="particles-js"></div>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sign Up</h3>
+                <div class="d-flex justify-content-end social_icon">
+                    <span><i class="fab fa-facebook-square"></i></span>
+                    <span><i class="fab fa-google-plus-square"></i></span>
+                    <span><i class="fab fa-twitter-square"></i></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user" style="color:white"></i></span>
+                        </div>
+                        {{ form.username(class="form-control", placeholder="Username") }}
+                        <!-- <input type="text" class="form-control" name="username" placeholder="Username" required> -->
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-envelope" style="color:white"></i></span>
+                        </div>
+                        {{ form.email(class="form-control", placeholder="Email") }}
+                        <!-- <input type="email" class="form-control" name="email" placeholder="Email-Id" required> -->
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-phone" style="color:white"></i></span>
+                        </div>
+                        {{ form.phone(class="form-control", placeholder="Phone No.") }}
+                        <!-- <input type="text" class="form-control" name="phone" placeholder="Phone No."> -->
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
+                        </div>
+                        {{ form.password(class="form-control", placeholder="Password") }}
+                        <!-- <input type="password" class="form-control" name="password" placeholder="Password" required> -->
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
+                        </div>
+                        {{ form.confirm_pass(class="form-control", placeholder="Confirm Password") }}
+                        <!-- <input type="password" class="form-control" name="confirm_pass" placeholder="Confirm Password" required> -->
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-calendar" style="color:white"></i></span>
+                        </div>
+                        {{ form.birthdate(class="form-control",type="date") }}
+                        <!-- <input type="date" class="form-control" name="birthdate" placeholder="Birth Date" required> -->
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn float-right login_btn") }}
+                        <!-- <input type="submit" value="Sign Up" class="btn float-right login_btn"> -->
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Already have an account?<a href="{{ url_for('login') }}" id="linking">Log In</a>
+                </div>
+            </div>
+            <div>
+                {% block content3 %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                <p class="flash-alert-{{ category }}">{{ msg }}</p>
+                {% endfor %} {% endif %} {% endwith %} {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

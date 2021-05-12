@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- particles.js container -->
+<div id="particles-js"></div>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sign In</h3>
+                <div class="d-flex justify-content-end social_icon">
+                    <span><i class="fab fa-facebook-square"></i></span>
+                    <span><i class="fab fa-google-plus-square"></i></span>
+                    <span><i class="fab fa-twitter-square"></i></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user" style="color:white"></i></span>
+                        </div>
+                        {{ form.email(class="form-control", placeholder="Username/Email") }}
+                        <!-- <input type="text" class="form-control" placeholder="Username" name="user_name" required> -->
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key" style="color:white"></i></span>
+                        </div>
+                        {{ form.password(class="form-control", placeholder="Password") }}
+                        <!-- <input type="password" class="form-control" placeholder="Password" name="pass" required> -->
+                    </div>
+                    <div class="row align-items-center remember">
+                        {{ form.remember(class="form-control") }}
+                        {{ form.remember.label() }}
+                        <!-- <p><input type="checkbox" name="cb" id="cb1"><label for="cb1">Remeber Me</label></p> -->
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn float-right login_btn") }}
+                        <!-- <input type="submit" value="Login" class="btn float-right login_btn"> -->
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Don't have an account?<a href="{{ url_for('signup') }}" id="linking">Sign Up</a>
+                </div>
+                <div class="d-flex justify-content-center links">
+                    <a href="/forgot_password/ " id="linking">Forgot password?</a>
+                </div>
+                <div>
+                    {% block content3 %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                    <p class="flash-alert-{{ category }}">{{ msg }}</p>
+                    {% endfor %} {% endif %} {% endwith %} {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
