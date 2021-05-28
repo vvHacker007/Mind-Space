@@ -8,10 +8,9 @@
             <div class="card-header">
                 <h3>Sign In</h3>
                 <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-google-plus-square"></i></span>
-                    <span><i class="fab fa-twitter-square"></i></span>
+                    <a href="/"><img src="../static/Images/Icons/logo.jpg" alt="Home-Page" style="height:90px; width:90px; border-radius: 50%;"></a>
                 </div>
+                <span style="font-style: italic; color:black;">Login to Awesomeness</span>
             </div>
             <div class="card-body">
                 <form method="POST">
@@ -47,7 +46,7 @@
                     Don't have an account?<a href="{{ url_for('signup') }}" id="linking">Sign Up</a>
                 </div>
                 <div class="d-flex justify-content-center links">
-                    <a href="/forgot_password/ " id="linking">Forgot password?</a>
+                    <a href="/forgot-password/ " id="linking">Forgot password?</a>
                 </div>
                 <div>
                     {% block content3 %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}

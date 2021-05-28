@@ -9,7 +9,7 @@ from passlib.hash import pbkdf2_sha256
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(find_dotenv())
 from functools import wraps
-from forms import RegistrationForm, LoginForm, PostForm, OTPForm
+from forms import RegistrationForm, LoginForm, PostForm, OTPForm, ForgotPassForm, ResetPassForm
 from flask_wtf import FlaskForm
 import uuid
 import time
@@ -91,11 +91,13 @@ def redirect_to_home():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if 'user' in session:
-        session.pop('user', None)
+    if 'user' in session or 'otp' in session:
+        session.clear()
+        print("REACHED THE POINT")
     if form.validate_on_submit():
         resp = None
-        # print(db.Login.find_one({'name': form.email.data}))
+        print("REACHED THE POINT BEYOND")
+        print(db.Login.find_one({'name': form.email.data}))
         if db.Login.find_one({'name': form.email.data}):
             resp = User().login(form,1)
         elif db.Login.find_one({'email': form.email.data}):
@@ -114,7 +116,7 @@ def login():
 def signup():
     form = RegistrationForm()
     if 'user' in session:
-        session.pop('user', None)
+        session.clear()
     if form.validate_on_submit() == False:
         if form.email.errors:
             for i in form.email.errors:
@@ -141,58 +143,33 @@ def signup():
         elif resp2=="failed_otp":
             flash(f"Please enter the valid email address OR check your internet connection!","danger")
             return render_template('signup.html', title='MindSpace-Signup', form=form)        
-        elif resp2=="failed":
+        else:
             # print("THIS IS VERY IMPORTANT!!!!")
-            if db.Login.find_one({'name': form.username.data}):
-                flash(f'Username already exists!','danger')
-                return redirect(url_for('signup'))
-            elif db.Login.find_one({'email': form.email.data}):
-                flash(f'Email already registered!','danger')
-                return redirect(url_for('signup'))
-            elif len(str(form.phone.data))<=6:
-                # print("HAHA PHONE INCORRECT")
-                flash(f"Please enter a valid phone number!",'danger')
-                return redirect(url_for('signup'))
-            elif len(str(form.phone.data))>=12:
-                # print("HAHA PHONE INCORRECT")
-                flash(f"Please enter a valid phone number!",'danger')
-                return redirect(url_for('signup'))
-            elif db.Login.find_one({'phone': form.phone.data}):
-                flash(f'Phone number already registered!','danger')
-                return redirect(url_for('signup'))
-            elif form.password.data != form.confirm_pass.data:
-                flash(f"Password doesn't match!",'danger')
-                return redirect(url_for('signup'))
-            elif len(form.password.data)<5 and len(form.confirm_pass.data)<5:
-                flash(f"Password too small!",'danger')
-                return redirect(url_for('signup'))
-            elif len(form.password.data)>20 and len(form.confirm_pass.data)>20:
-                flash(f"Password too big!",'danger')
-                return redirect(url_for('signup'))
-            else:
-                flash(f'Signup Failed!', 'danger')
-            return redirect(url_for('signup'))
+            flash(resp2,'danger')
+            return render_template('signup.html', title='MindSpace-Signup', form=form)
     return render_template('signup.html', title='MindSpace-Signup', form=form)
 
 @app.route('/<user>/home')
 def user_home(user):
-    if 'user' in session:
+    if session['user']['name']==user:
         return render_template("user_home.html",posts=posts,user=user) #user['name'] not working for signin session
+    elif 'user' in session and session['user']['name']!=user:
+        return redirect(url_for('user_home',user=session['user']['name']))
     else:
-        session.pop('user',None)
+        session.clear()
         return redirect(url_for('login'))
 
 
 @app.route('/logout/') # logout completed
 def logout():
     if 'user' in session:
-        session.pop('user', None)
+        session.clear()
     return redirect(url_for('login'))
 
 
 @app.route('/<user>/write/',methods=['GET','POST'])
 def user_write(user):
-    if 'user' in session:
+    if session['user']['name']==user:
         form = PostForm()
         if form.validate_on_submit():
             print(form.content.data)
@@ -213,8 +190,10 @@ def user_write(user):
                 flash("@"+session['user']['name']+" your blogs has been saved on your timeline successfully")
                 return render_template('message.html',user=user)
         return render_template("write_post.html",user=user,form=form,title="Write")
+    elif 'user' in session and session['user']['name']!=user:
+        return redirect(url_for('user_write',user=session['user']['name']))
     else:
-        session.pop('user',None)
+        session.clear()
         return redirect(url_for('login'))
 
 @app.before_request
@@ -229,9 +208,25 @@ def user_profile(user):
     user_posts = db.Posts.find({"name" : user})
     return render_template("profile.html",user=user,posts=user_posts)
 
-@app.route("/forgot-password/")
+@app.route("/forgot-password/",methods=['GET','POST'])
 def forgot_password():
-    return render_template("forgot_password.html")
+    form = ForgotPassForm()
+    print("REACHER HERE 999")
+    if 'user' in session or 'otp' in session:
+        session.clear()
+        print("REACHED THE POINT")
+    if form.validate_on_submit():
+        resp = None
+        print("REACHED THE POINT BEYOND")
+        print(db.Login.find_one({'name': form.email_id.data}))
+        if db.Login.find_one({'email': form.email_id.data}):
+            resp = User().forgot_pass(form)
+        print("RESP IS",resp)
+        if resp=="success":
+            return redirect(url_for('otp_verify'))
+        else:
+            flash(f"Please enter a valid email address","danger")    
+    return render_template("forgot_password.html",title='MindSpace-Forgot Password', form=form)
 
 @app.route("/verification/",methods=['GET','POST'])
 def otp_verify():
@@ -239,7 +234,7 @@ def otp_verify():
     if 'otp' not in session:
         return redirect(url_for('signup'))
     print("OTP Verification Needed!")
-    if form.validate_on_submit():
+    if 'otp' in session and 'user_signup' in session and form.validate_on_submit():
         print("OTP Verification 1")
         print(form.otp.data)
         print(form.submit.data)
@@ -251,17 +246,39 @@ def otp_verify():
                 flash(f'Account created successfully!', 'success')
                 return redirect(url_for('login'))
         else:
-            session.pop('otp',None)
-            session.pop('user_signup',None)
+            session.clear()
             flash(f'OTP you have entered is incorrect, Try Again!', 'danger')
             return redirect(url_for('signup'))
-        session.pop('otp',None)
-        session.pop('user_signup',None)
+        session.clear()
+    if 'otp' in session and 'user_signup' not in session and form.validate_on_submit():
+        print("OTP Verification 1")
+        print(form.otp.data)
+        print(form.submit.data)
+        if(form.otp.data==session['otp']):
+            session.pop('otp',None)
+            return redirect(url_for('reset_pass'))
     return render_template("otp_verification.html", title='MindSpace-Verification',form=form)
 
 
-
-
+@app.route('/reset-password/',methods=['GET','POST'])
+def reset_pass():
+    form = ResetPassForm()
+    if form.validate_on_submit():
+        if form.password.data != form.confirm_pass.data:
+            flash(f"Password doesn't match!","danger")
+        elif len(form.password.data)<5 and len(form.confirm_pass.data)<5:
+            flash(f"Password too small!","danger")
+        elif len(form.password.data)>20 and len(form.confirm_pass.data)>20:
+            flash(f"Password too long!","danger")
+        else:
+            user = db.Login.find_one(session["email"])
+            form.password.data = pbkdf2_sha256.encrypt(form.password.data)
+            db.Login.update_one({"email":session["email"]},{"$set":{"password":form.password.data}})
+            session.pop('user_signup',None)
+            print("PASSSED2")
+            flash(f'Password changed successfully!', 'success')
+            return redirect(url_for('login'))
+    return render_template("reset_password.html", title='MindSpace-Reset Password',form=form)
 
 
 

@@ -31,3 +31,12 @@ def length_check(form,field):
 class OTPForm(FlaskForm):
     otp = StringField('Enter OTP', validators=[DataRequired(),length_check])
     submit = SubmitField('Verify')
+
+class ForgotPassForm(FlaskForm):
+    email_id = StringField('Enter Email-Id',validators=[DataRequired()])
+    submit = SubmitField('Send OTP')
+
+class ResetPassForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_pass = PasswordField('Confirm Password',validators=[DataRequired()])
+    submit = SubmitField("Change Password")

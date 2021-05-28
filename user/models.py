@@ -29,7 +29,8 @@ class User:
 
     def signup(self,form):
         print(request.form)
-
+        today = datetime.date.today()
+        date_today = today.strftime("%B %d, %Y")
         # Create the user object
         user = {
             "_id":uuid.uuid4().hex,
@@ -38,6 +39,7 @@ class User:
             "password":form.password.data,
             "phone":form.phone.data,
             "birthdate":str(form.birthdate.data),
+            "joined_date": str(date_today),
             "submitted_blogs":0,
             "saved_blogs":0,
             "followers":0,
@@ -48,21 +50,21 @@ class User:
         user['password'] = pbkdf2_sha256.encrypt(user['password'])
             
         if db.Login.find_one({'name': form.username.data}):
-            return "failed"
+            return "Username already exists!"
         elif db.Login.find_one({'email': form.email.data}):
-            return "failed"
+            return "Email already registered!"
         elif len(str(form.phone.data))<=6:
-            return "failed"
+            return "Please enter a valid phone number!"
         elif len(str(form.phone.data))>=12:
-            return "failed"
+            return "Please enter a valid phone number!"
         elif db.Login.find_one({'phone': form.phone.data}):
-            return "failed"
+            return "Phone number already registered!"
         elif form.password.data != form.confirm_pass.data:
-            return "failed"
+            return "Password doesn't match!"
         elif len(form.password.data)<5 and len(form.confirm_pass.data)<5:
-            return "failed"
+            return "Password too small!"
         elif len(form.password.data)>20 and len(form.confirm_pass.data)>20:
-            return "failed"
+            return "Password too long!"
         if db.Login.find_one(str(user["email"]))==None:
             print("PASSSED1")
             today = datetime.date.today()
@@ -156,3 +158,32 @@ class User:
         db.Saved_posts.insert_one(user_posts_saved)
         nosb = db.Login.find_one({'name':session['user']['name']})['saved_blogs']
         db.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}})
+
+    def forgot_pass(self,form):
+        if db.Login.find_one({'email':form.email_id.data})==None:
+            return "Email-id is not registered!"
+        elif db.Login.find_one({'email': form.email_id.data}):
+            print("PASSSED1")
+            session.clear()
+            today = datetime.date.today()
+            date_today = today.strftime("%B %d, %Y")
+            time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
+            # try:
+            print("PASSED OTP0")
+            session['otp'] = self.generate_otp()
+            session['email'] = form.email_id.data
+            print(session['otp'])
+            print("OTP Generated")
+            server = smtplib.SMTP("smtp.gmail.com" , 587)
+            server.ehlo()
+            server.starttls()
+            print("PASSED OTP1")
+            server.login('mindspaceblogging@gmail.com','Mind_Space@007')
+            print("PASSED OTP2")
+            message = "Dear MindSDpace User,\n Your One Time PIN(OTP) for MindSpace Registration is: "+session["otp"]+"\n\n(Generated at " + date_today + time_now + "\nThis is an auto-generated email. Do not reply to this email."
+            print(message)
+            print("PASSED OTP3")
+            server.sendmail('mindspaceblogging@gmail.com',form.email_id.data,message)
+            print("OTP sent succesfully..")
+            server.quit()
+            return "success"
