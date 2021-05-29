@@ -14,13 +14,19 @@ from flask_wtf import FlaskForm
 import uuid
 import time
 from dateutil.relativedelta import relativedelta, MO
+# from flask_cors import CORS, cross_origin
+import cloudinary
+import cloudinary.uploader
+# from goodreads_quotes import Goodreads
 # from profanityfilter import ProfanityFilter
 # pf = ProfanityFilter()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
 client = pm.MongoClient(os.getenv('MONGO_CLIENT'))
-db = client.Blogs
+db1 = client.Blogs
+# db2 = client.Users Will use this later for login and signup
+db3 = client.Cloudinary
 
 from user.models import User
 
@@ -97,10 +103,10 @@ def login():
     if form.validate_on_submit():
         resp = None
         print("REACHED THE POINT BEYOND")
-        print(db.Login.find_one({'name': form.email.data}))
-        if db.Login.find_one({'name': form.email.data}):
+        print(db1.Login.find_one({'name': form.email.data}))
+        if db1.Login.find_one({'name': form.email.data}):
             resp = User().login(form,1)
-        elif db.Login.find_one({'email': form.email.data}):
+        elif db1.Login.find_one({'email': form.email.data}):
             resp = User().login(form,0)
         print("RESP IS",resp)
         if resp=="success":
@@ -203,10 +209,42 @@ def before_request():
         g.user=session['user']
 
 
-@app.route("/<user>/profile/")
+@app.route("/<user>/profile/",methods=['GET','POST'])
 def user_profile(user):
-    user_posts = db.Posts.find({"name" : user})
-    return render_template("profile.html",user=user,posts=user_posts)
+    user_posts = db1.Posts.find({"name" : user})
+    user_data = db1.Login.find_one({"name":user})
+    # print(Goodreads.get_daily_quote())
+    if 'user' in session and user_data['email'] == session['user']["email"]:
+        print("REACHED_HERE first")
+        app.logger.info('in upload route')
+        cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+        upload_result = None
+        print("REACHED_HERE 2nd")
+        if request.method == 'POST':
+            print("REACHED_HERE 3rd")
+            file_to_upload = request.files['profile_image']
+            app.logger.info('%s file_to_upload', file_to_upload)
+            if file_to_upload:
+                print("REACHED_HERE fourth")
+                upload_result = cloudinary.uploader.upload(file_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                app.logger.info(upload_result)
+                print("REACHED_HERE last")
+                upload_result["username"] = session['user']['name']
+                upload_result["email"] = session['user']['email']
+                upload_result["phone"] = session['user']['phone']
+                upload_result["_id"] = uuid.uuid4().hex
+                resp = User().profile_image_upload(upload_result)
+                if resp=="success":
+                    flash(session['user']['name']+", your profile picture has been uploaded successfully!!")
+                elif resp=="failed":
+                    flash(session['user']['name']+", due to some issues your image did not upload, Try again later!")
+                return render_template('message.html',user=session['user']['name'])
+            else:
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!File Not Uploaded!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    else:
+        return render_template("others_profile.html",user=user_data,posts=user_posts)
+    return render_template("profile.html",user=user_data,posts=user_posts)
+
 
 @app.route("/forgot-password/",methods=['GET','POST'])
 def forgot_password():
@@ -218,8 +256,8 @@ def forgot_password():
     if form.validate_on_submit():
         resp = None
         print("REACHED THE POINT BEYOND")
-        print(db.Login.find_one({'name': form.email_id.data}))
-        if db.Login.find_one({'email': form.email_id.data}):
+        print(db1.Login.find_one({'name': form.email_id.data}))
+        if db1.Login.find_one({'email': form.email_id.data}):
             resp = User().forgot_pass(form)
         print("RESP IS",resp)
         if resp=="success":
@@ -240,7 +278,7 @@ def otp_verify():
         print(form.submit.data)
         if(form.otp.data==session['otp']):
             session.pop('otp',None)
-            if db.Login.insert_one(session["user_signup"]):
+            if db1.Login.insert_one(session["user_signup"]):
                 session.pop('user_signup',None)
                 print("PASSSED2")
                 flash(f'Account created successfully!', 'success')
@@ -271,9 +309,9 @@ def reset_pass():
         elif len(form.password.data)>20 and len(form.confirm_pass.data)>20:
             flash(f"Password too long!","danger")
         else:
-            user = db.Login.find_one(session["email"])
+            user = db1.Login.find_one(session["email"])
             form.password.data = pbkdf2_sha256.encrypt(form.password.data)
-            db.Login.update_one({"email":session["email"]},{"$set":{"password":form.password.data}})
+            db1.Login.update_one({"email":session["email"]},{"$set":{"password":form.password.data}})
             session.pop('user_signup',None)
             print("PASSSED2")
             flash(f'Password changed successfully!', 'success')
@@ -281,7 +319,9 @@ def reset_pass():
     return render_template("reset_password.html", title='MindSpace-Reset Password',form=form)
 
 
-
+@app.route('/<user>/edit/')
+def edit_profile(user):
+    return render_template("edit_profile.html",user=user)
 
 
 

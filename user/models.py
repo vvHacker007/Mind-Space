@@ -1,7 +1,7 @@
 from flask import Flask,jsonify,request,session,redirect
 from passlib.hash import pbkdf2_sha256
 import uuid
-from app import db
+from app import db1, db3
 import datetime
 from dateutil.relativedelta import relativedelta, MO
 import time
@@ -20,7 +20,6 @@ class User:
     
     def start_session(self,user):
         del user['password']
-        del user['birthdate']
         session['logged_in'] = True
         session['user'] = user
         session.permanent = True
@@ -49,15 +48,15 @@ class User:
         # Encrypt the password
         user['password'] = pbkdf2_sha256.encrypt(user['password'])
             
-        if db.Login.find_one({'name': form.username.data}):
+        if db1.Login.find_one({'name': form.username.data}):
             return "Username already exists!"
-        elif db.Login.find_one({'email': form.email.data}):
+        elif db1.Login.find_one({'email': form.email.data}):
             return "Email already registered!"
         elif len(str(form.phone.data))<=6:
             return "Please enter a valid phone number!"
         elif len(str(form.phone.data))>=12:
             return "Please enter a valid phone number!"
-        elif db.Login.find_one({'phone': form.phone.data}):
+        elif db1.Login.find_one({'phone': form.phone.data}):
             return "Phone number already registered!"
         elif form.password.data != form.confirm_pass.data:
             return "Password doesn't match!"
@@ -65,7 +64,7 @@ class User:
             return "Password too small!"
         elif len(form.password.data)>20 and len(form.confirm_pass.data)>20:
             return "Password too long!"
-        if db.Login.find_one(str(user["email"]))==None:
+        if db1.Login.find_one(str(user["email"]))==None:
             print("PASSSED1")
             today = datetime.date.today()
             date_today = today.strftime("%B %d, %Y")
@@ -103,10 +102,10 @@ class User:
         print(flag)
         if flag==0:
             print("REACHED SUCCESS1")
-            user = db.Login.find_one({"email": form.email.data})
+            user = db1.Login.find_one({"email": form.email.data})
         elif flag==1:
             print("REACHED SUCCESS2")
-            user = db.Login.find_one({"name": form.email.data})
+            user = db1.Login.find_one({"name": form.email.data})
         print(user)
         print(pbkdf2_sha256.verify(form.password.data, user['password']))
         if user and pbkdf2_sha256.verify(form.password.data, user['password'])==True:
@@ -135,9 +134,9 @@ class User:
             "comments":0
         }
         
-        db.Posts.insert_one(user_posts)
-        nob = db.Login.find_one({'name':session['user']['name']})['submitted_blogs']
-        if db.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob+1}}):
+        db1.Posts.insert_one(user_posts)
+        nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
+        if db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob+1}}):
             return "success"
         return "failed"
     
@@ -155,14 +154,14 @@ class User:
             "title":str(form.title.data),
             "blog":str(form.content.data),
         }
-        db.Saved_posts.insert_one(user_posts_saved)
-        nosb = db.Login.find_one({'name':session['user']['name']})['saved_blogs']
-        db.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}})
+        db1.Saved_posts.insert_one(user_posts_saved)
+        nosb = db1.Login.find_one({'name':session['user']['name']})['saved_blogs']
+        db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}})
 
     def forgot_pass(self,form):
-        if db.Login.find_one({'email':form.email_id.data})==None:
+        if db1.Login.find_one({'email':form.email_id.data})==None:
             return "Email-id is not registered!"
-        elif db.Login.find_one({'email': form.email_id.data}):
+        elif db1.Login.find_one({'email': form.email_id.data}):
             print("PASSSED1")
             session.clear()
             today = datetime.date.today()
@@ -187,3 +186,18 @@ class User:
             print("OTP sent succesfully..")
             server.quit()
             return "success"
+
+    def profile_image_upload(self,image_json):
+        print("THIS IS THE TYPE OF IMAGE_JSON",image_json)
+        image_url = image_json['secure_url']
+        user_email = db1.Login.find_one({"email": image_json['email']})
+        if user_email and db3.Profile.insert_one(image_json):
+            if db1.Login.update_many({'email':image_json['email']},{"$set":{"profile_pic": image_url}}):
+                user = db1.Login.find_one({"email": image_json['email']})
+                del user['password']
+                session["user"] = user
+                return "success"
+            else:
+                return "failed"
+        return "failed"
+

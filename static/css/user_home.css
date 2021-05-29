@@ -10439,3 +10439,110 @@ header.masthead h1 {
 .profile-header {
     transform: translateY(5rem);
 }
+
+.edit-btn-background
+{
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    margin-left:15px;
+}
+
+.edit-btn:hover 
+{
+    background-color: white;
+    color: black;
+}
+
+.edit-btn 
+{
+    background-color: black;
+    color: white;
+}
+
+@media(orientation: portrait)
+{
+    .parent-div-profile
+    {
+        /* display:flex; */
+        flex-direction: column;
+    }
+    .child-div-profile-1
+    {
+        padding-top:2vh;
+    }
+    .child-div-profile-2
+    {
+        padding-bottom:4vh; 
+    }
+}
+
+.parent-div-profile
+{
+    display:flex;
+    /* flex-direction: column; */
+}
+
+.child-div-profile-1
+{
+    padding-top:5vh;
+    padding-bottom:0vh; 
+    align-items: center;
+    padding-left: 28.445%;
+}
+.child-div-profile-2
+{
+    padding-top:5vh; 
+    padding-bottom:4vh; 
+    align-items: center;
+    padding-left: 11.5%;
+}
+
+.photo-container{
+    position: relative;
+    width: 100%;
+}
+
+.profile-photo
+{
+    opacity: 1;
+    transition: .5s ease;
+}
+
+.middle 
+{
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.photo-container:hover .profile-photo 
+{
+    opacity: 0.5;
+}
+
+.photo-container:hover .middle 
+{
+    opacity: 1;
+}
+
+.text 
+{
+    background-color: transparent;
+    color: white;
+    font-size: 12px;
+    padding: 10px 20px;
+    white-space: nowrap;
+}

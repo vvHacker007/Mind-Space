@@ -97,12 +97,6 @@
                                 <div class="photo-container">
                                     <div>
                                         <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
-                                        <div class="middle">
-                                            <div class="text">Upload Photo</div>
-                                        </div>
-                                        <form id="form" method="POST" enctype = "multipart/form-data">
-                                            <input type="file" name="profile_image" id="wizard-picture" style="cursor: pointer; opacity: 0 !important; position:absolute; left: 0; top:0; width: 130px; height: 130px; border-radius:50%;">
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -112,18 +106,11 @@
                                 <div class="photo-container">
                                     <div>
                                         <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
-                                        <div class="middle">
-                                            <div class="text">Change Photo</div>
-                                        </div>
-                                        <form id="form" method="POST" enctype = "multipart/form-data">
-                                            <input type="file" name="profile_image" id="wizard-picture" style="cursor: pointer; opacity: 0 !important; position:absolute; left: 0; top:0; width: 130px; height: 130px; border-radius:50%;">
-                                        </form>
                                     </div>
                                 </div>
                             </div>
                             {% endif %}
                         </div>
-                        <div style="padding-top:2vh;"><a href="/{{ user.name }}/edit/"><button class="edit-btn-background edit-btn">Edit profile</button></a></div>
                     </div>
                     
                     <div class="child-div-profile-2">
