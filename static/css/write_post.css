@@ -1908,6 +1908,10 @@ pre code {
     margin-bottom: 1rem;
 }
 
+.form-group-outside {
+    padding-bottom: 2rem;
+}
+
 .form-text {
     display: block;
     margin-top: 0.25rem;
@@ -2170,8 +2174,17 @@ pre code {
         flex: 0 0 auto;
         flex-flow: row wrap;
         align-items: center;
-        margin-bottom: 0;
+        padding-bottom: 0;
     }
+
+    .form-inline .form-group-outside {
+        display: flex;
+        flex: 0 0 auto;
+        flex-flow: row wrap;
+        align-items: center;
+        padding-bottom: 2rem;
+    }
+
     .form-inline .input-group,
     .form-inline .custom-select {
         width: auto;
@@ -8905,7 +8918,7 @@ hr.light {
 @media (min-width: 992px) {
     #mainNav {
         box-shadow: none;
-        background-color: #171717;
+        background-color: #000000;
     }
     #mainNav .navbar-brand {
         color: rgba(255, 255, 255, 0.7);
@@ -9215,3 +9228,86 @@ grid-area: 1 / 1 / 2 / 2;
     top:50%;
 }
 
+#upload {
+    opacity: 0;
+}
+
+#upload-label {
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    overflow-wrap: anywhere;
+}
+
+.image-area {
+    border: 2px dashed rgba(0,0,0);
+    padding: 1rem;
+    position: relative;
+}
+
+.image-area::before {
+    content: 'Uploaded image result';
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    z-index: 1;
+}
+
+.image-area img {
+    z-index: 2;
+    position: relative;
+}
+
+.rounded-pill
+{
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.shadow-class
+{
+    box-shadow: 0 0rem 2rem rgba(0, 0, 0, 0.15);
+    border-radius: 10rem;
+    height: fit-content;
+}
+
+.text-uppercase
+{
+    font-size:0.9rem;
+}
+
+
+@media(orientation: portrait)
+{
+    #upload-label {
+        font-size: 0.7rem;
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        overflow-wrap: anywhere;
+    }
+    .image-area::before {
+        content: 'Uploaded image result';
+        color: #000;
+        font-weight: bold;
+        text-transform: uppercase;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.7rem;
+        z-index: 1;
+    }
+
+    .text-uppercase
+    {
+        font-size:0.7rem;
+    }
+}

@@ -10121,7 +10121,7 @@ hr.light {
 @media (min-width: 992px) {
     #mainNav {
         box-shadow: none;
-        background-color: #171717;
+        background-color: #000000;
     }
     #mainNav .navbar-brand {
         color: rgba(255, 255, 255, 0.7);
@@ -10394,6 +10394,7 @@ header.masthead h1 {
 
 .div-card{
     height:fit-content;
+    max-width: fit-content !important;
     margin-bottom:1rem;
     width:20rem;
     border-radius: 10px;
@@ -10402,6 +10403,7 @@ header.masthead h1 {
     float: left;
     margin-left:1.5rem;
     font-size: small;
+    color: black;
     /* margin: 15 2vw; */
 }
 
@@ -10414,15 +10416,20 @@ header.masthead h1 {
     display:flex;
     justify-content: space-between;
     height:auto;
+    width:auto;
 }
 .img-title img{
-    height:100px !important;
-    width:100px !important;
+    display: block;
+    max-width:100px;
+    max-height:100px;
+    width: auto !important;
+    height: auto !important;
 }
 
-.img-title h3{
+.img-title h4{
     margin-left:1vw;
-    margin-top:8vh;
+    margin-top:3vh;
+    overflow-wrap: break-word;
 }
 
 .summary-text{

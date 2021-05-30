@@ -86,7 +86,7 @@
     </div>
     <div class="posts-container">
         <div class="content-section">
-            <form id="myform" method="POST" action="">
+            <form id="myform" method="POST" action="" enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
@@ -120,9 +120,28 @@
                         </div>
                     </div>
                 </fieldset>
+                <div class="row py-4">
+                    <div class="col-lg-6 mx-auto">
+                        <!-- Upload image input-->
+                        <div class="shadow-class">
+                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                {{ form.file(id="upload", type="file", onchange="readURL(this);", class="form-control border-0") }}
+                                <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                                <!-- <button type="reset" id="pseudoCancel">
+                                    Cancel
+                                </button> -->
+                                <div class="input-group-append">
+                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload-alt mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+            
+                    </div>
+                </div>
             </form>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info",form="myform") }} {{ form.save(class="btn btn-outline-success",form="myform") }} <button class="btn btn-outline-danger" id="discard-button">Discard</button>
+            <div class="form-group-outside">
+                {{ form.submit(class="btn btn-outline-info", form="myform") }} {{ form.save(class="btn btn-outline-success", form="myform") }} <button class="btn btn-outline-danger" id="discard-button">Discard</button>
             </div>   
         </div>
     </div>
@@ -159,6 +178,37 @@
                       })}
                 })
             }
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+        
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+    
+        var input = document.getElementById( 'upload' );
+        var infoArea = document.getElementById( 'upload-label' );
+        
+        input.addEventListener( 'change', showFileName );
+        function showFileName( event ) {
+          var input = event.srcElement;
+          var fileName = input.files[0].name;
+          var length = 10;
+          var trimmedName = fileName.length > length ? fileName.substring(0, length - 3) + "..." + fileName.substring(fileName.length-4,fileName.length): fileName;
+          infoArea.textContent = 'File name: ' + trimmedName;
+        }
     </script>
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>

@@ -9,6 +9,8 @@ from cryptography.fernet import Fernet
 from text_summarizer import summarize
 import math, random
 import smtplib
+import re
+import markdown
 
 class User:
     def generate_otp(self) :
@@ -114,26 +116,47 @@ class User:
             return "success"    
         return "failed"
     
-    def create_post(self,form,user):
+    def create_post(self,form,user,image_json=None):
         today = datetime.date.today()
         date_today = today.strftime("%B %d, %Y")
         time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
-        form.content.data = form.content.data.replace(r"\n", "\t")
-        content_summary = summarize(form.content.data) 
-        user_posts = {
-            "_id":uuid.uuid4().hex,
-            "name":str(session['user']['name']),
-            "email":str(session['user']['email']),
-            "phone":str(session['user']['phone']),
-            "date":str(date_today),
-            "time":str(time_now),
-            "title":str(form.title.data),
-            "blog":str(form.content.data),
-            "summary":str(content_summary),
-            "likes":0,
-            "comments":0
-        }
-        
+        form.content.data = markdown.markdown(form.content.data)
+        print("THIS IS THE MARKDOWN FORMAT",form.content.data)
+        cleanr = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+        cleantext = re.sub(cleanr, '', form.content.data)
+        cleantext = cleantext.replace(r"\n", "\t")
+        print("THIS IS THE CLEANED FORMAT",cleantext)
+        content_summary = summarize(cleantext) 
+        if image_json==None:
+            user_posts = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":str(form.title.data),
+                "blog":str(form.content.data),
+                "summary":str(content_summary),
+                "img":"",
+                "likes":0,
+                "comments":0        
+                }
+        elif image_json['secure_url']:
+            user_posts = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":str(form.title.data),
+                "blog":str(form.content.data),
+                "summary":str(content_summary),
+                "img":str(image_json['secure_url']),
+                "likes":0,
+                "comments":0        
+                }
         db1.Posts.insert_one(user_posts)
         nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
         if db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob+1}}):
@@ -200,4 +223,13 @@ class User:
             else:
                 return "failed"
         return "failed"
+    
+    def blog_image_upload(self,image_json):
+        print("THIS IS THE TYPE OF IMAGE_JSON",image_json)
+        image_url = image_json['secure_url']
+        user_email = db1.Login.find_one({"email": image_json['email']})
+        if user_email and db3.Blog.insert_one(image_json):
+            return "success"
+        else:
+            return "failed"
 

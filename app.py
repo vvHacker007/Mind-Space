@@ -17,6 +17,8 @@ from dateutil.relativedelta import relativedelta, MO
 # from flask_cors import CORS, cross_origin
 import cloudinary
 import cloudinary.uploader
+import json
+# import markdown
 # from goodreads_quotes import Goodreads
 # from profanityfilter import ProfanityFilter
 # pf = ProfanityFilter()
@@ -41,50 +43,50 @@ from user.models import User
 # 	return dict(key='value',some_func_key=calling_func) //using this i can use the variables key and some_func() in any jinja templates to access the variables
 
 #tutorial
-posts = [
-    {
-        'author':'Author1',
-        'title':'Blog 1',
-        'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-        'date_posted':'April 07, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Blog Content 2',
-        'date_posted':'April 09, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-        'date_posted':'April 09, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Blog Content 2',
-        'date_posted':'April 09, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-        'date_posted':'April 09, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-        'date_posted':'April 09, 2021'
-    },
-    {
-        'author':'Author2',
-        'title':'Blog 2',
-        'content':'Blog Content 2',
-        'date_posted':'April 09, 2021'
-    },
-]
+# posts = [
+#     {
+#         'author':'Author1',
+#         'title':'Blog 1',
+#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
+#         'date_posted':'April 07, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Blog Content 2',
+#         'date_posted':'April 09, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
+#         'date_posted':'April 09, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Blog Content 2',
+#         'date_posted':'April 09, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
+#         'date_posted':'April 09, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
+#         'date_posted':'April 09, 2021'
+#     },
+#     {
+#         'author':'Author2',
+#         'title':'Blog 2',
+#         'content':'Blog Content 2',
+#         'date_posted':'April 09, 2021'
+#     },
+# ]
 
 ist = pytz.timezone('Asia/Kolkata')
 
@@ -136,7 +138,6 @@ def signup():
         date1 = datetime.datetime(int(y),int(m),int(d))
         date2 = datetime.datetime(int(ty),int(tm),int(td))
         years = relativedelta(date2,date1).years
-
         resp2 = User().signup(form)
         # print("THIS IS IMPORTANT!!!!!!!")
         # print(resp2)
@@ -157,7 +158,10 @@ def signup():
 
 @app.route('/<user>/home')
 def user_home(user):
+    # user = db1.Login.find_one({"name":user})
+    # user_posts = db1.Posts.find_many({"email":user["email"]})
     if session['user']['name']==user:
+        posts = db1.Posts.find({})
         return render_template("user_home.html",posts=posts,user=user) #user['name'] not working for signin session
     elif 'user' in session and session['user']['name']!=user:
         return redirect(url_for('user_home',user=session['user']['name']))
@@ -175,16 +179,33 @@ def logout():
 
 @app.route('/<user>/write/',methods=['GET','POST'])
 def user_write(user):
+    form = PostForm()
     if session['user']['name']==user:
-        form = PostForm()
         if form.validate_on_submit():
             print(form.content.data)
             print(form.title.data)
             print(form.submit.data)
             print(form.save.data)
             if form.submit.data == True:
-                resp = User().create_post(form,user)
-                if resp == "success":
+                app.logger.info('in upload route')
+                cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                upload_dict_result = None
+                img_to_upload = form.file.data
+                app.logger.info('%s file_to_upload', img_to_upload)
+                if img_to_upload:
+                    print("REACHED_HERE first")
+                    upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                    app.logger.info(upload_dict_result)
+                    print("REACHED_HERE second")
+                    upload_dict_result["username"] = session['user']['name']
+                    upload_dict_result["email"] = session['user']['email']
+                    upload_dict_result["phone"] = session['user']['phone']
+                    resp1 = User().blog_image_upload(upload_dict_result)
+                    resp2 = User().create_post(form,user,upload_dict_result)
+                else:
+                    resp1 = "success"
+                    resp2 = User().create_post(form,user,upload_dict_result)
+                if resp1=="success" and resp2 == "success":
                     flash("Congrats @"+session['user']['name']+", your blog has been posted successfully!!")
                     return render_template('message.html',user=user)
                 else:
@@ -211,8 +232,8 @@ def before_request():
 
 @app.route("/<user>/profile/",methods=['GET','POST'])
 def user_profile(user):
-    user_posts = db1.Posts.find({"name" : user})
     user_data = db1.Login.find_one({"name":user})
+    user_posts = db1.Posts.find({"email" : user_data["email"]})
     # print(Goodreads.get_daily_quote())
     if 'user' in session and user_data['email'] == session['user']["email"]:
         print("REACHED_HERE first")
@@ -322,6 +343,16 @@ def reset_pass():
 @app.route('/<user>/edit/')
 def edit_profile(user):
     return render_template("edit_profile.html",user=user)
+
+@app.route("/blog/<_id>/")
+def user_blog_redirect(_id):
+    user_post = db1.Posts.find_one({"_id":_id})
+    # user_post['blog'] = "{% extends 'blog.html' %} {% block content %} " + user_post['blog'] + "{% endblock %}"
+    # with open('templates/blog_content.html', 'w') as f:
+    #     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!REACHED THE HTML WRITER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    #     print(user_post['blog'])
+    #     f.write(user_post['blog'])
+    return render_template("blog.html",user_post=user_post)
 
 
 
