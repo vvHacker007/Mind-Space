@@ -24,7 +24,7 @@
     <link rel="icon" type="image/png" href="../static/Images/Icons/logo_3.ico"/>
 </head>
 
-<body id="page-top">
+<body id="page-top" style="overflow-x:hidden !important;">
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
@@ -123,14 +123,14 @@
                             </div>
                             {% endif %}
                         </div>
-                        <div style="padding-top:2vh;"><a href="/{{ user.name }}/edit/"><button class="edit-btn-background edit-btn">Edit profile</button></a></div>
+                        <div style="padding-top:2vh; padding-right:4rem;"><a href="/{{ user.name }}/edit/"><button class="edit-btn-background edit-btn">Edit profile</button></a></div>
                     </div>
                     
                     <div class="child-div-profile-2">
-                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.name }}</h1>
+                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.full_name }}</h1>
                         <ul class="list-inline mb-0" style="text-align:left; padding-top:1vh;">
                             <li class="list-inline-item">
-                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Photos</small>
+                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-blog mr-1"></i>Blogs</small>
                             </li>
                             <li class="list-inline-item">
                                 <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.followers }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
@@ -153,7 +153,7 @@
                 <br>
                 <div class="py-4 px-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">Recent Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                        <h5 class="mb-0">Published Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
                     </div>
                     <div class="row">
                         {% for post in posts %}
@@ -165,6 +165,26 @@
                                 </div>
                                 <div class="summary-text">
                                     <p>{{ post.summary }}</p>
+                                    <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
+                                        <br>
+                                    <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">Saved Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                    </div>
+                    <div class="row">
+                        {% for post in saved_posts %}
+                        <a href="/saved/{{ post._id }}/">
+                            <div class="div-card">
+                                <div class="img-title">
+                                    <h4><b>{{ post.title }}</b></h4>
+                                    <img src={{ post.img }}>
+                                </div>
+                                <div class="summary-text">
                                     <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
                                         <br>
                                     <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>

@@ -9248,7 +9248,7 @@ grid-area: 1 / 1 / 2 / 2;
 }
 
 .image-area::before {
-    content: 'Uploaded image result';
+    content: 'Uploaded image';
     color: #000;
     font-weight: bold;
     text-transform: uppercase;
@@ -9294,7 +9294,7 @@ grid-area: 1 / 1 / 2 / 2;
         overflow-wrap: anywhere;
     }
     .image-area::before {
-        content: 'Uploaded image result';
+        content: 'Uploaded image';
         color: #000;
         font-weight: bold;
         text-transform: uppercase;

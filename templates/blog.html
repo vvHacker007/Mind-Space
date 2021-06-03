@@ -90,11 +90,30 @@
             <div class="bg-white shadow rounded overflow-hidden">
                 
                 <div style="background-color: white; height:fit-content;">
-                    <div>
-                        <h1 align=center style="font-size:8vh;">{{ user_post.title }}</h1>
+                    <div class="text_font_size">
+                        <h1 align=center>{{ user_post.title }}</h1>
+                        <div class="post_profile">
+                            <div class="post_profile_user">
+                                <img src="{{ user.profile_pic }}" alt="Profile Photo" class="profile-photo" id="wizardPicturePreview" style="background-color:green; border: 2px solid green; border-radius: 50%;">
+                                <a href="/{{ user.name }}/profile/"><h4>{{ user.name }}</h4></a>
+                            </div>
+                            <div class="post_profile_date">
+                                <h5>Last Modified @{{ user_post.date }}</h5>
+                            </div>
+                        </div>
                     </div>
-                    <img src={{ user_post.img }} style="width: 40%; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh;">
-                    <div style="padding-left:2vw; padding-right: 2vw;">{{ user_post["blog"] | safe }}</div>
+                    {% if user_post.img %}
+                    <img src={{ user_post.img }} style="max-width: 100%; height:auto; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh; padding-left: 15vw; padding-right: 15vw;">
+                    {% endif %}
+                    <div class="text_font_size" id="a_href_new_link" style="padding-left:5vw; padding-right: 5vw; padding-bottom: 15vh;">{{ user_post["blog"] | safe }}</div>
+                    <div class="edit_discard_btn">
+                        <div style="padding-right:1vw;">
+                            <a href="/blog/{{ user_post._id }}/edit/"><button class="edit_blog_btn">Edit</button></a>
+                        </div> 
+                        <div style="padding-right:10vw;">
+                            <button id="delete_btn_redirect" class="delete_blog_btn">Delete</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,6 +122,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.7.1/dist/sweetalert2.all.min.js" integrity="sha256-1pZ3aajcQuFEOG/veUw/WxQjAMJiCSTZo8wH+opDplY=" crossorigin="anonymous"></script>
+    <script>
+        window.onload=setupLinks;
+        function setupLinks()
+        {
+            var webSites = document.getElementById("a_href_new_link");
+            if (webSites)
+            {
+                var links = webSites.getElementsByTagName("a");
+                var i, href, title;
+                for (i=0; i<links.length; i++)
+                {
+                    href = links[i].getAttribute("href");
+                    links[i].onclick = function(){window.open(href,'_blank'); return false;};
+                }
+            }	
+        }
+    </script>
+    <script>
+        var discard_button = document.getElementById("delete_btn_redirect");
+        discard_button.onclick = function(){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            timer: 5000
+            }).then((result) => {
+                if (result.value) 
+                {
+                    Swal.fire(
+                      'Deleted!',
+                      'Your blog has been deleted.',
+                      'success',
+                      ).then(function(){
+                        window.location = '/blog/{{ user_post._id }}/delete/';
+                      })}
+                })
+            }
+    </script>
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>

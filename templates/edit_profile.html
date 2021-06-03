@@ -17,9 +17,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
     <!---Search Bar-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <title>Mind Space - {{ user }}</title>
+    <title>Mind Space - Edit Profile</title>
     <!-- Core theme CSS -->
-    <link href="../static/css/user_home.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/edit_profile.css') }}"/>
 </head>
 
 <body id="page-top">
@@ -30,9 +30,9 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
                         <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
                         <li class="nav-item">
@@ -81,48 +81,277 @@
                 </div>
             </div>
         </nav>
-        <!--Masthead-->
-        <header class="masthead">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-uppercase text-white font-weight-bold">Mind Space</h1>
-                        <hr class="divider my-4" />
+        <div class="whole-container">
+            <div class="container">
+                <form id="myform" method="POST" action="" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    {{ form.hidden_tag() }}
+                    <div class="row gutters">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="account-settings">
+                                        <div class="user-profile">
+                                            <div class="child-div-profile-1">
+                                                <div class="media align-items-end profile-head">
+                                                    {% if user.profile_pic=="None" %}
+                                                    <div>
+                                                        <div class="photo-container">
+                                                            <div>
+                                                                <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                                                <div class="middle">
+                                                                    <div class="text">Upload Photo</div>
+                                                                </div>
+                                                                    {{ form.file(id="wizard-picture", type="file", style="cursor: pointer; opacity: 0 !important; position:absolute; left: 0; top:0; width: 130px; height: 130px; border-radius:50%;") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                        
+                                                    {% else %}
+                                                    <div>
+                                                        <div class="photo-container">
+                                                            <div>
+                                                                <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid black; border-radius: 50%;">
+                                                                <div class="middle">
+                                                                    <div class="text">Change Photo</div>
+                                                                </div>
+                                                                {{ form.file(id="wizard-picture", type="file", style="cursor: pointer; opacity: 0 !important; position:absolute; left: 0; top:0; width: 130px; height: 130px; border-radius:50%;") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            {% if user.full_name %}
+                                            <h5 class="user_full_name"style="text-align: center !important;">{{ user.full_name }}</h5>
+                                            {% else %}
+                                            <h5 class="user_full_name" style="text-align: center !important;">{{ user.name }}</h5>
+                                            {% endif %}
+                                            <h6 class="user_name" style="text-align: center !important;">@{{ user.name }}</h6>
+                                        </div>
+                                        {% if user.bio %}
+                                            <div class="about">
+                                                <h5>About</h5>
+                                                <p>{{ user.bio }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="row gutters">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <h6 class="mb-2" style="color:black; font-size:large;">Personal Details</h6>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="full_name">Full Name</label>
+                                                {{ form.user_fullname(class="form-control", placeholder=user.full_name) }}
+                                                {% if form.user_fullname.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.user_fullname.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                {{ form.new_email(type="email", class="form-control", placeholder=user.email) }} 
+                                                {% if form.new_email.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_email.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}                                               
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="phone">Phone</label>
+                                                {{ form.new_phone( class="form-control", placeholder=user.phone) }}
+                                                {% if form.new_phone.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_phone.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="dob">Date of Birth <small>{{ user.birthdate }}</small></label>
+                                                {{ form.new_birthdate(class="form-control",type="date") }}
+                                                {% if form.new_birthdate.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_birthdate.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="username">User Name</label>
+                                                {{ form.new_username( class="form-control", placeholder=user.name) }}
+                                                {% if form.new_username.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_username.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="about_user">Bio</label>
+                                                {{ form.new_about_me( class="form-control", placeholder=user.bio) }}
+                                                {% if form.new_about_me.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_about_me.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="new_pass">New Password</label>
+                                                {{ form.new_password( class="form-control", placeholder="Enter New Password") }}
+                                                {% if form.new_password.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.new_password.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %}                                                </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="confirm_new_pass">Confirm New Password</label>
+                                                {{ form.re_new_password( class="form-control", placeholder="Re-Type New Password") }}
+                                                {% if form.re_new_password.errors %}
+                                                <div style="color:rgb(243, 42, 42);">
+                                                    {% for error in form.re_new_password.errors %}
+                                                        <span>{{ error }}</span> 
+                                                    {% endfor %} 
+                                                </div>
+                                                {% endif %} 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light ml-5">A mint of Creativity...</p>
-                        <a class="btn btn-primary btn-xl" href="#blogs">Find Out More</a>
+                </form>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                        <button id="cancel-btn" class="btn btn-secondary">Cancel</button> {{ form.submit(form="myform", class="btn btn-primary") }}
                     </div>
                 </div>
-            </div>
-        </header>
-        <!--Blogs-->
-        <section class="page-section bg-primary" id="blogs">
-            <h2 style="margin-left:18vw;"><b>HELLO {{ user }}</b></h2>
-            <div class="container-card">
-                {% for post in posts %}
-                <div class="div-card">
-                    <div class="img-title">
-                        <h3><b>{{ post.title }}</b></h3>
-                        <img src="../static/Images/Background_images/breno-machado-in9-n0JwgZ0-unsplash.jpg">
-                    </div>
-                    <div class="summary-text">
-                        <p>{{ post.content }}</p>
-                        <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.author }}</small>
-                            <br>
-                        <small class="text-muted"style="margin-right:15vw;">{{ post.date_posted }}</small></p>
-                    </div>
+                <div style="color:rgb(243, 42, 42); text-align:center;">
+                    {% block content3 %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                    <p>{{ msg }}</p>
+                    {% endfor %} {% endif %} {% endwith %} {% endblock %}
                 </div>
-                {% endfor %}
             </div>
-        </section>
-    </div>
+        </div>
     <!-- Bootstrap core JS-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.7.1/dist/sweetalert2.all.min.js" integrity="sha256-1pZ3aajcQuFEOG/veUw/WxQjAMJiCSTZo8wH+opDplY=" crossorigin="anonymous"></script>
+    <script>
+        var cancel_button = document.getElementById("cancel-btn");
+        console.log("CLICKED IT")
+        cancel_button.onclick = function(){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, discard it!',
+            timer: 5000
+            }).then((result) => {
+                if (result.value) 
+                {
+                    Swal.fire(
+                      'Discarded!',
+                      'Your blog has been discarded.',
+                      'success',
+                      ).then(function() {
+                        document.getElementsByClassName("form-control").value = "";
+                    }).then(function(){
+                        window.location = 'http://127.0.0.1:5000/{{ user.name }}/profile/';
+                      })}
+                })
+            }
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+        
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+    
+        var input = document.getElementById( 'upload' );
+        var infoArea = document.getElementById( 'upload-label' );
+        
+        input.addEventListener( 'change', showFileName );
+        function showFileName( event ) {
+          var input = event.srcElement;
+          var fileName = input.files[0].name;
+          var length = 10;
+          var trimmedName = fileName.length > length ? fileName.substring(0, length - 3) + "..." + fileName.substring(fileName.length-4,fileName.length): fileName;
+          infoArea.textContent = 'File name: ' + trimmedName;
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            // Prepare the preview for profile picture
+                $("#wizard-picture").change(function(){
+                    readURL(this);
+                });
+            });
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+            
+                    reader.onload = function (e) {
+                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow');
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+    </script>
     <!-- Core theme JS-->
     <script src="../static/js/home.js"></script>
 </body>

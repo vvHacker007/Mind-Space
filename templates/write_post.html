@@ -96,7 +96,7 @@
                         {% if form.title.errors%}
                             {{ form.title(class="form-control form-control-lg is-invalid",id="clear_title_input") }}
                             <div class="invalid-feedback">
-                                {% for error in form.content.errors %}
+                                {% for error in form.title.errors %}
                                     <span>{{ error }}</span> 
                                 {% endfor %} 
                             </div>

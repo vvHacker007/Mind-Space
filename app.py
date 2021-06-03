@@ -9,11 +9,12 @@ from passlib.hash import pbkdf2_sha256
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(find_dotenv())
 from functools import wraps
-from forms import RegistrationForm, LoginForm, PostForm, OTPForm, ForgotPassForm, ResetPassForm
+from forms import RegistrationForm, LoginForm, PostForm, OTPForm, ForgotPassForm, ResetPassForm, EditProfileForm
 from flask_wtf import FlaskForm
 import uuid
 import time
 from dateutil.relativedelta import relativedelta, MO
+from markdownify import markdownify
 # from flask_cors import CORS, cross_origin
 import cloudinary
 import cloudinary.uploader
@@ -42,51 +43,6 @@ from user.models import User
 # def context_processor():
 # 	return dict(key='value',some_func_key=calling_func) //using this i can use the variables key and some_func() in any jinja templates to access the variables
 
-#tutorial
-# posts = [
-#     {
-#         'author':'Author1',
-#         'title':'Blog 1',
-#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-#         'date_posted':'April 07, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Blog Content 2',
-#         'date_posted':'April 09, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-#         'date_posted':'April 09, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Blog Content 2',
-#         'date_posted':'April 09, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-#         'date_posted':'April 09, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos sit dolorum similique, unde consequatur repudiandae iusto laborum at nihil quasi non excepturi veritatis impedit tenetur vero nesciunt rem explicabo doloremque.',
-#         'date_posted':'April 09, 2021'
-#     },
-#     {
-#         'author':'Author2',
-#         'title':'Blog 2',
-#         'content':'Blog Content 2',
-#         'date_posted':'April 09, 2021'
-#     },
-# ]
 
 ist = pytz.timezone('Asia/Kolkata')
 
@@ -213,21 +169,36 @@ def user_write(user):
                     flash("Due to some issues the blog wasn't posted. But we have saved the content on your timeline. You can check that using on your profile")
                     return render_template('message.html',user=user)
             elif form.save.data == True:
-                User().save_post(form,user)
-                flash("@"+session['user']['name']+" your blogs has been saved on your timeline successfully")
-                return render_template('message.html',user=user)
+                app.logger.info('in upload route')
+                cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                upload_dict_result = None
+                img_to_upload = form.file.data
+                app.logger.info('%s file_to_upload', img_to_upload)
+                if img_to_upload:
+                    print("REACHED_HERE first")
+                    upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                    app.logger.info(upload_dict_result)
+                    print("REACHED_HERE second")
+                    upload_dict_result["username"] = session['user']['name']
+                    upload_dict_result["email"] = session['user']['email']
+                    upload_dict_result["phone"] = session['user']['phone']
+                    resp1 = User().blog_image_upload(upload_dict_result)
+                    resp2 = User().save_post(form,user,upload_dict_result)
+                else:
+                    resp1 = "success"
+                    resp2 = User().save_post(form,user)
+                if resp1=="success" and resp2 == "success":
+                    flash("Congrats @"+session['user']['name']+", your blog has been posted successfully!!")
+                    return render_template('message.html',user=user)
+                else:
+                    flash("Due to some issues the blog wasn't saved. Try again, later")
+                    return render_template('message.html',user=user)
         return render_template("write_post.html",user=user,form=form,title="Write")
     elif 'user' in session and session['user']['name']!=user:
         return redirect(url_for('user_write',user=session['user']['name']))
     else:
         session.clear()
         return redirect(url_for('login'))
-
-@app.before_request
-def before_request():
-    g.user=None
-    if 'user' in session:
-        g.user=session['user']
 
 
 @app.route("/<user>/profile/",methods=['GET','POST'])
@@ -237,6 +208,7 @@ def user_profile(user):
     # print(Goodreads.get_daily_quote())
     if 'user' in session and user_data['email'] == session['user']["email"]:
         print("REACHED_HERE first")
+        saved_user_posts = db1.Saved_posts.find({"email" : session["user"]["email"]})
         app.logger.info('in upload route')
         cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
         upload_result = None
@@ -264,7 +236,7 @@ def user_profile(user):
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!File Not Uploaded!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     else:
         return render_template("others_profile.html",user=user_data,posts=user_posts)
-    return render_template("profile.html",user=user_data,posts=user_posts)
+    return render_template("profile.html",user=user_data,posts=user_posts,saved_posts=saved_user_posts)
 
 
 @app.route("/forgot-password/",methods=['GET','POST'])
@@ -309,13 +281,22 @@ def otp_verify():
             flash(f'OTP you have entered is incorrect, Try Again!', 'danger')
             return redirect(url_for('signup'))
         session.clear()
-    if 'otp' in session and 'user_signup' not in session and form.validate_on_submit():
+    if 'otp' in session and 'user_signup' not in session and 'user_updated_data' not in session and form.validate_on_submit():
         print("OTP Verification 1")
         print(form.otp.data)
         print(form.submit.data)
         if(form.otp.data==session['otp']):
             session.pop('otp',None)
             return redirect(url_for('reset_pass'))
+    if 'otp' in session and 'user_signup' not in session and 'user_updated_data' in session and form.validate_on_submit():
+        print("OTP Verification 1")
+        print(form.otp.data)
+        print(form.submit.data)
+        if(form.otp.data==session['otp']):
+            session.pop('otp',None)
+            db1.Login.update_one({"email":session["user"]["email"]},{"$set":session["user_updated_data"] })
+            session.clear()
+            return redirect(url_for('login'))
     return render_template("otp_verification.html", title='MindSpace-Verification',form=form)
 
 
@@ -340,30 +321,257 @@ def reset_pass():
     return render_template("reset_password.html", title='MindSpace-Reset Password',form=form)
 
 
-@app.route('/<user>/edit/')
+@app.route('/<user>/edit/',methods=['GET','POST'])
 def edit_profile(user):
-    return render_template("edit_profile.html",user=user)
+    if user == session['user']['name']:
+        form = EditProfileForm()
+        user = db1.Login.find_one({"name":session['user']['name']})
+        app.logger.info('in upload route')
+        cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+        upload_result = None
+        if form.validate_on_submit():
+            print("REACHED HERE!")
+            user_fullname = form.user_fullname.data
+            new_user_email = form.new_email.data
+            new_user_phone = form.new_phone.data
+            new_user_dob = form.new_birthdate.data
+            new_user_name = form.new_username.data
+            new_bio = form.new_about_me.data
+            new_pass = form.new_password.data
+            new_re_pass = form.re_new_password.data
+            new_pic = form.file.data
+            app.logger.info('%s file_to_upload', new_pic)
+            resp1="not_failed"
+            resp2="success"
+            resp3="failed"
+            if new_pic:
+                print("REACHED_HERE fourth")
+                upload_result = cloudinary.uploader.upload(new_pic, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                app.logger.info(upload_result)
+                print("REACHED_HERE last")
+                upload_result["username"] = session['user']['name']
+                upload_result["email"] = session['user']['email']
+                upload_result["phone"] = session['user']['phone']
+                upload_result["_id"] = uuid.uuid4().hex
+                resp1 = User().profile_image_upload(upload_result)
+
+            if user_fullname or new_user_email or new_user_phone or new_user_dob or new_user_name or new_bio or new_pass or new_re_pass:
+                user_update = {
+                        "name":new_user_name,
+                        "email":new_user_email,
+                        "password":new_pass,
+                        "confirm_pass":new_re_pass,
+                        "phone":new_user_phone,
+                        "birthdate":new_user_dob,
+                        "full_name":user_fullname,
+                        "bio":new_bio
+                    }
+                resp2 = User().profile_update(user_update)
+                resp3="success"
+            if resp2=="success" and resp3=="success":
+                return redirect(url_for('otp_verify'))
+            elif resp2!="success":
+                flash(resp2,'danger')
+                return render_template("edit_profile.html",user=user,form=form)
+            elif resp1=="failed":
+                flash(session['user']['name']+", due to some issues your image did not upload, Try again later!",'danger')
+                return render_template("edit_profile.html",user=user,form=form)
+            elif resp1=="success":
+                flash(session['user']['name']+", your image has been uploaded successfully!",'success')
+                return render_template("edit_profile.html",user=user,form=form)
+            elif resp1=="not_failed":
+                return render_template("edit_profile.html",user=user,form=form)
+            return render_template("edit_profile.html",user=user,form=form)
+        return render_template("edit_profile.html",user=user,form=form)
+    else:
+        return redirect(url_for('edit_profile',user=session['user']['name']))
 
 @app.route("/blog/<_id>/")
 def user_blog_redirect(_id):
     user_post = db1.Posts.find_one({"_id":_id})
-    # user_post['blog'] = "{% extends 'blog.html' %} {% block content %} " + user_post['blog'] + "{% endblock %}"
-    # with open('templates/blog_content.html', 'w') as f:
-    #     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!REACHED THE HTML WRITER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    #     print(user_post['blog'])
-    #     f.write(user_post['blog'])
-    return render_template("blog.html",user_post=user_post)
+    user = db1.Login.find_one({"name":user_post["name"]})
+    if user_post["name"] == session["user"]["name"]:
+        return render_template("blog.html",user_post=user_post,user=user)
+    elif user_post["name"] != session["user"]["name"]:
+        return render_template("others_blog.html",user_post=user_post,user=user)
+
+@app.route("/blog/<_id>/edit/",methods=['GET','POST'])
+def edit_blog(_id):
+    user_post = db1.Posts.find_one({"_id":_id})
+    if user_post["name"] == session["user"]["name"]:
+        user_post["blog"] = markdownify(user_post["blog"])
+        if request.method == "POST":
+            if request.form.get("post_blog"):
+                app.logger.info('in upload route')
+                cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                upload_dict_result = None
+                img_to_upload = request.files["blog_file"]
+                app.logger.info('%s file_to_upload', img_to_upload)
+                user_post["blog"] = request.form["blog_text"]
+                user_post["title"] = request.form["title_text"]
+                if img_to_upload:
+                    print("REACHED_HERE first")
+                    upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                    app.logger.info(upload_dict_result)
+                    print("REACHED_HERE second")
+                    upload_dict_result["username"] = session['user']['name']
+                    upload_dict_result["email"] = session['user']['email']
+                    upload_dict_result["phone"] = session['user']['phone']
+                    user_post["img"] = upload_dict_result["secure_url"]
+                    resp1 = User().blog_image_upload(upload_dict_result)
+                    resp2 = User().edit_post(user_post,upload_dict_result)
+                else:
+                    resp1 = "success"
+                    resp2 = User().edit_post(user_post,upload_dict_result)
+                if resp1=="success" and resp2 == "success":
+                    flash("Congrats @"+session['user']['name']+", your blog has been posted successfully!!")
+                    return render_template('message.html',user=session["user"]["name"])
+                else:
+                    User().edit_save(user_post,upload_dict_result)
+                    flash("Due to some issues the blog wasn't posted. But we have saved the content on your timeline. You can check that using on your profile")
+                    return render_template('message.html',user=session["user"]["name"])
+            elif request.form.get("save_blog"):
+                    app.logger.info('in upload route')
+                    cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                    upload_dict_result = None
+                    img_to_upload = request.files["blog_file"]
+                    app.logger.info('%s file_to_upload', img_to_upload)
+                    user_post["blog"] = request.form["blog_text"]
+                    user_post["title"] = request.form["title_text"]
+                    if img_to_upload:
+                        print("REACHED_HERE first")
+                        upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                        app.logger.info(upload_dict_result)
+                        print("REACHED_HERE second")
+                        upload_dict_result["username"] = session['user']['name']
+                        upload_dict_result["email"] = session['user']['email']
+                        upload_dict_result["phone"] = session['user']['phone']
+                        user_post["img"] = upload_dict_result["secure_url"]
+                        resp1 = User().blog_image_upload(upload_dict_result)
+                        resp2 = User().edit_post(user_post,upload_dict_result)
+                    else:
+                        resp1 = "success"
+                        resp2 = User().edit_save(user_post,upload_dict_result)
+                    if resp1=="success" and resp2 == "success":
+                        flash("@"+session['user']['name']+" your blogs has been saved on your timeline successfully")
+                    return render_template('message.html',user=session["user"]["name"])   
+    else:
+        return redirect(url_for('user_blog_redirect',_id=user_post["_id"]))
+    return render_template("edit_blog.html",user_post=user_post)
+
+
+
+@app.route("/blog/<_id>/delete/")
+def delete_blog(_id):
+    user_post = db1.Posts.find_one({"_id":_id})
+    if user_post["name"] == session["user"]["name"]:
+        db1.Posts.delete_one({"_id":_id})
+        nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
+        if db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob-1}}):
+            flash(session["user"]["name"]+",your blog has been removed successfully!")
+        else:
+            flash(session["user"]["name"]+", due to some issues we were not able to remove your blog. Try again later!")
+        return render_template("message.html",user=session["user"]["name"])
+    else:
+        return redirect(url_for('user_blog_redirect',_id=user_post["_id"]))
 
 
 
 
+@app.route("/saved/<_id>/")
+def user_saved_blog_redirect(_id):
+    user_post = db1.Saved_posts.find_one({"_id":_id})
+    user = db1.Login.find_one({"name":user_post["name"]})
+    if user_post["name"] == session["user"]["name"]:
+        return render_template("saved_blog.html",user_post=user_post,user=user)
+    elif user_post["name"] != session["user"]["name"]:
+        return redirect(url_for('user_home',user=session["user"]["name"]))
+
+
+@app.route("/saved/<_id>/edit/",methods=['GET','POST'])
+def edit_saved_blog(_id):
+    user_post = db1.Saved_posts.find_one({"_id":_id})      
+    if user_post["name"] == session["user"]["name"]:
+        user_post["blog"] = markdownify(user_post["blog"])
+        print("THIS IS THE TITLE",user_post['title'])
+        if request.method == "POST":
+            if request.form.get("post_blog"):
+                app.logger.info('in upload route')
+                cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                upload_dict_result = None
+                img_to_upload = request.files["blog_file"]
+                app.logger.info('%s file_to_upload', img_to_upload)
+                user_post["blog"] = request.form["blog_text"]
+                user_post["title"] = request.form["title_text"]
+                if img_to_upload:
+                    print("REACHED_HERE first")
+                    upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                    app.logger.info(upload_dict_result)
+                    print("REACHED_HERE second")
+                    upload_dict_result["username"] = session['user']['name']
+                    upload_dict_result["email"] = session['user']['email']
+                    upload_dict_result["phone"] = session['user']['phone']
+                    user_post["img"] = upload_dict_result["secure_url"]
+                    resp1 = User().blog_image_upload(upload_dict_result)
+                    resp2 = User().edit_post(user_post,upload_dict_result)
+                else:
+                    resp1 = "success"
+                    resp2 = User().edit_post(user_post,upload_dict_result)
+                if resp1=="success" and resp2 == "success":
+                    flash("Congrats @"+session['user']['name']+", your blog has been posted successfully!!")
+                    return render_template('message.html',user=session["user"]["name"])
+                else:
+                    User().edit_save(user_post,upload_dict_result)
+                    flash("Due to some issues the blog wasn't posted. But we have saved the content on your timeline. You can check that using on your profile")
+                    return render_template('message.html',user=session["user"]["name"])
+            elif request.form.get("save_blog"):
+                print("REACHED THIS SUCCESSFULLY")
+                app.logger.info('in upload route')
+                cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
+                upload_dict_result = None
+                img_to_upload = request.files["blog_file"]
+                app.logger.info('%s file_to_upload', img_to_upload)
+                user_post["blog"] = request.form["blog_text"]
+                user_post["title"] = request.form["title_text"]
+                if img_to_upload:
+                    print("REACHED_HERE first")
+                    upload_dict_result = cloudinary.uploader.upload(img_to_upload, api_secret=os.getenv('API_SECRET'), folder="MindSpace")
+                    app.logger.info(upload_dict_result)
+                    print("REACHED_HERE second")
+                    upload_dict_result["username"] = session['user']['name']
+                    upload_dict_result["email"] = session['user']['email']
+                    upload_dict_result["phone"] = session['user']['phone']
+                    user_post["img"] = upload_dict_result["secure_url"]
+                    resp1 = User().blog_image_upload(upload_dict_result)
+                    resp2 = User().edit_save(user_post,upload_dict_result)
+                else:
+                    resp1 = "success"
+                    resp2 = User().edit_save(user_post)
+                if resp1=="success" and resp2 == "success":
+                    flash("@"+session['user']['name']+" your blogs has been saved on your timeline successfully")
+                else:
+                    return render_template("edit_saved_blog.html",user_post=user_post)
+                return render_template('message.html',user=session["user"]["name"])  
+    else:
+        return redirect(url_for('user_home',user=session["user"]["name"]))
+    return render_template("edit_saved_blog.html",user_post=user_post)
 
 
 
-
-
-
-
+@app.route("/saved/<_id>/delete/")
+def delete_saved_blog(_id):
+    user_post = db1.Saved_posts.find_one({"_id":_id})
+    print("THIS IS THE BLOG YOU WANT TO DELETE",user_post)
+    if user_post["name"] == session["user"]["name"]:
+        db1.Saved_posts.delete_one({"_id":_id})
+        nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
+        if db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob-1}}):
+            flash(session["user"]["name"]+",your blog has been removed successfully!")
+        else:
+            flash(session["user"]["name"]+", due to some issues we were not able to remove your blog. Try again later!")
+        return render_template("message.html",user=session["user"]["name"])
+    else:
+        return redirect(url_for('user_home',user=session["user"]["name"]))
 
 
 # if __name__ == '__main__':

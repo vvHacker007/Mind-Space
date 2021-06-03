@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />   
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:1000,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:1000,1000,1000italic,1000italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- Third party plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+    <!--Post section Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!---Search Bar-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <title>Mind Space - {{ user_post.title }}</title>
+    <!-- Core theme CSS -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}"/>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" href="../static/Images/Icons/logo_3.ico"/>
+</head>
+
+<body id="page-top">
+    <div class="navigation">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item">
+                            <div class="search-box">
+                                <input type="text" placeholder="Search...">
+                                <div class="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="cancel-icon">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <div class="search-data">
+                                </div>
+                            </div>
+                            <script>
+                                const searchBox = document.querySelector(".search-box");
+                                const searchBtn = document.querySelector(".search-icon");
+                                const cancelBtn = document.querySelector(".cancel-icon");
+                                const searchInput = document.querySelector("input");
+                                const searchData = document.querySelector(".search-data");
+                                searchBtn.onclick = () => {
+                                    searchBox.classList.add("active");
+                                    searchBtn.classList.add("active");
+                                    searchInput.classList.add("active");
+                                    cancelBtn.classList.add("active");
+                                    searchInput.focus();
+                                    if (searchInput.value != "") {
+                                        var values = searchInput.value;
+                                        searchData.classList.remove("active");
+                                        searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                    } else {
+                                        searchData.textContent = "";
+                                    }
+                                }
+                                cancelBtn.onclick = () => {
+                                    searchBox.classList.remove("active");
+                                    searchBtn.classList.remove("active");
+                                    searchInput.classList.remove("active");
+                                    cancelBtn.classList.remove("active");
+                                    searchData.classList.toggle("active");
+                                    searchInput.value = "";
+                                }
+                            </script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="row py-5 px-4" style="position: relative; padding-top: 10rem !important;">
+        <div class="col-md-12 mx-auto">
+            <!-- Profile widget -->
+            <div class="bg-white shadow rounded overflow-hidden">
+                
+                <div style="background-color: white; height:fit-content;">
+                    <div class="text_font_size">
+                        <h1 align=center>{{ user_post.title }}</h1>
+                        <div class="post_profile">
+                            <div class="post_profile_user">
+                                <img src="{{ user.profile_pic }}" alt="Profile Photo" class="profile-photo" id="wizardPicturePreview" style="background-color:green; border: 2px solid green; border-radius: 50%;">
+                                <a href="/{{ user.name }}/profile/"><h4>{{ user.name }}</h4></a>
+                            </div>
+                            <div class="post_profile_date">
+                                <h5>Last Modified @{{ user_post.date }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% if user_post.img %}
+                    <img src={{ user_post.img }} style="max-width: 100%; height:auto; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh; padding-left: 15vw; padding-right: 15vw;">
+                    {% endif %}
+                    <div class="text_font_size" id="a_href_new_link" style="padding-left:5vw; padding-right: 5vw; padding-bottom: 15vh;">{{ user_post["blog"] | safe }}</div>
+                    <div class="edit_discard_btn">
+                        <div style="padding-right:1vw;">
+                            <a href="/saved/{{ user_post._id }}/edit/"><button class="edit_blog_btn">Edit</button></a>
+                        </div> 
+                        <div style="padding-right:10vw;">
+                            <button id="delete_btn_redirect" class="delete_blog_btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Bootstrap core JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.7.1/dist/sweetalert2.all.min.js" integrity="sha256-1pZ3aajcQuFEOG/veUw/WxQjAMJiCSTZo8wH+opDplY=" crossorigin="anonymous"></script>
+    <script>
+        window.onload=setupLinks;
+        function setupLinks()
+        {
+            var webSites = document.getElementById("a_href_new_link");
+            if (webSites)
+            {
+                var links = webSites.getElementsByTagName("a");
+                var i, href, title;
+                for (i=0; i<links.length; i++)
+                {
+                    href = links[i].getAttribute("href");
+                    links[i].onclick = function(){window.open(href,'_blank'); return false;};
+                }
+            }	
+        }
+    </script>
+    <script>
+        var discard_button = document.getElementById("delete_btn_redirect");
+        discard_button.onclick = function(){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            timer: 5000
+            }).then((result) => {
+                if (result.value) 
+                {
+                    Swal.fire(
+                      'Deleted!',
+                      'Your blog has been deleted.',
+                      'success',
+                      ).then(function(){
+                        window.location = '/saved/{{ user_post._id }}/delete/';
+                      })}
+                })
+            }
+    </script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../static/js/home.js"></script>
+</body>
+
+</html>

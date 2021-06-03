@@ -45,7 +45,8 @@ class User:
             "saved_blogs":0,
             "followers":0,
             "profile-pic":"",
-            "following":0
+            "following":0,
+            "full_name":form.username.data
         }
         # Encrypt the password
         user['password'] = pbkdf2_sha256.encrypt(user['password'])
@@ -163,23 +164,50 @@ class User:
             return "success"
         return "failed"
     
-    def save_post(self,form,user):
+    def save_post(self,form,user,image_json=None):
         today = datetime.date.today()
         date_today = today.strftime("%B %d, %Y")
         time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
-        user_posts_saved = {
-            "_id":uuid.uuid4().hex,
-            "name":str(session['user']['name']),
-            "email":str(session['user']['email']),
-            "phone":str(session['user']['phone']),
-            "date":str(date_today),
-            "time":str(time_now),
-            "title":str(form.title.data),
-            "blog":str(form.content.data),
-        }
+        form.content.data = markdown.markdown(form.content.data)
+        print("THIS IS THE MARKDOWN FORMAT",form.content.data)
+        cleanr = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+        cleantext = re.sub(cleanr, '', form.content.data)
+        cleantext = cleantext.replace(r"\n", "\t")
+        print("THIS IS THE CLEANED FORMAT",cleantext)
+        content_summary = summarize(cleantext)
+        if image_json:
+            user_posts_saved = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":str(form.title.data),
+                "blog":str(form.content.data),
+                "img":image_json["secure_url"],
+                "likes":0,
+                "comments":0        
+                }
+        else:
+            user_posts_saved = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":str(form.title.data),
+                "blog":str(form.content.data),
+                "img":"",
+                "likes":0,
+                "comments":0        
+                }
         db1.Saved_posts.insert_one(user_posts_saved)
         nosb = db1.Login.find_one({'name':session['user']['name']})['saved_blogs']
-        db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}})
+        if db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}}):
+            return "success"
+        return "failed;"
 
     def forgot_pass(self,form):
         if db1.Login.find_one({'email':form.email_id.data})==None:
@@ -232,4 +260,187 @@ class User:
             return "success"
         else:
             return "failed"
+        
+    def profile_update(self,updated_data):
+        to_update = {}
+        user_data = db1.Login.find_one({"name":session["user"]["name"]})
+        if updated_data["name"]:
+            if db1.Login.find_one({"name":updated_data["name"]})==None:
+                to_update["name"] = updated_data["name"]
+            else:
+                return "Username already exists!"
+        if updated_data["email"]:
+            if db1.Login.find_one({"email":updated_data["email"]})==None:
+                to_update["email"] = updated_data["email"]
+            else:
+                return "Email already registered!"
+        
+        if updated_data["password"] and updated_data["confirm_pass"]=="":
+            return "Confirm the new password!"
+        
+        if updated_data["password"] and updated_data["confirm_pass"]:
+            if updated_data["password"] == updated_data["confirm_pass"]:
+                if pbkdf2_sha256.verify(updated_data["password"],user_data["password"])==True:
+                    return "New password matches the old password"
+                to_update["password"] = updated_data["password"]
+            else:
+                return "Password doesn't match!"
+        
 
+        if updated_data["phone"]:
+            if db1.Login.find_one({"phone":updated_data["phone"]}):
+                if updated_data["phone"] >= 12 and updated_data["phone"]<=6:
+                    to_update["phone"] = int(updated_data["phone"])
+                else:
+                    return "Please enter a valid phone number!"
+            else:
+                return "Phone number already registered!"
+        if updated_data["birthdate"]:
+            to_update["birthdate"] = str(updated_data["birthdate"])
+        if updated_data["full_name"]:
+            to_update["full_name"] = updated_data["full_name"]
+        if updated_data["bio"]:
+            to_update["bio"] = updated_data["bio"]
+        session["user_updated_data"]=to_update
+        if db1.Login.find_one({'email': session['user']['email']}):
+            print("PASSSED1")
+            today = datetime.date.today()
+            date_today = today.strftime("%B %d, %Y")
+            time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
+            # try:
+            print("PASSED OTP0")
+            session['otp'] = self.generate_otp()
+            print(session['otp'])
+            print("OTP Generated")
+            server = smtplib.SMTP("smtp.gmail.com" , 587)
+            server.ehlo()
+            server.starttls()
+            print("PASSED OTP1")
+            server.login('mindspaceblogging@gmail.com','Mind_Space@007')
+            print("PASSED OTP2")
+            message = "Dear MindSDpace User,\n Your One Time PIN(OTP) for MindSpace Registration is: "+session["otp"]+"\n\n(Generated at " + date_today + time_now + "\nThis is an auto-generated email. Do not reply to this email."
+            print(message)
+            print("PASSED OTP3")
+            server.sendmail('mindspaceblogging@gmail.com',session["user"]["email"],message)
+            print("OTP sent succesfully..")
+            server.quit()
+            return "success"
+        else:
+            return "failed"
+        
+    
+    def edit_post(self,user_blog,image_json=None):
+        today = datetime.date.today()
+        date_today = today.strftime("%B %d, %Y")
+        time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
+        user_blog["blog"] = markdown.markdown(user_blog["blog"])
+        print("THIS IS THE MARKDOWN FORMAT",user_blog["blog"])
+        cleanr = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+        cleantext = re.sub(cleanr, '', user_blog["blog"])
+        cleantext = cleantext.replace(r"\n", "\t")
+        print("THIS IS THE CLEANED FORMAT",cleantext)
+        content_summary = summarize(cleantext) 
+        if image_json:
+            user_posts = {
+                "_id":user_blog['_id'],
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":user_blog["title"],
+                "blog":user_blog["blog"],
+                "img":image_json["secure_url"],
+                "summary":str(content_summary),
+                "likes":0,
+                "comments":0        
+                }
+        else:
+            user_posts = {
+                "_id":user_blog["_id"],
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":user_blog["title"],
+                "blog":user_blog["blog"],
+                "img":user_blog['img'],
+                "summary":str(content_summary),
+                "likes":0,
+                "comments":0        
+                }
+        if db1.Posts.find_one({"_id":user_blog["_id"]}):
+            del user_posts["_id"]
+            db1.Posts.update_one({"_id":user_blog["_id"]},{"$set":user_posts })
+            return "success"
+        elif db1.Saved_posts.find_one({"_id":user_blog["_id"]}):
+            db1.Saved_posts.delete_one({"_id":user_blog["_id"]})
+            db1.Posts.insert_one(user_posts)
+            nosb = db1.Login.find_one({'name':session['user']['name']})['saved_blogs']
+            nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
+            if db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb-1}}) and db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob+1}}):
+                return "success"
+        return "failed"
+    
+    def edit_save(self,user_blog,image_json=None):
+        today = datetime.date.today()
+        date_today = today.strftime("%B %d, %Y")
+        time_now = str(time.strftime("%I:%M:%S %p,", time.gmtime())) + str(" GMT")
+        user_blog["blog"] = markdown.markdown(user_blog["blog"])
+        print("THIS IS THE MARKDOWN FORMAT",user_blog["blog"])
+        cleanr = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+        cleantext = re.sub(cleanr, '', user_blog["blog"])
+        cleantext = cleantext.replace(r"\n", "\t")
+        print("THIS IS THE CLEANED FORMAT",cleantext)
+        content_summary = summarize(cleantext)
+        if image_json:
+            user_posts_saved = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":user_blog["title"],
+                "blog":user_blog["blog"],
+                "img":image_json["secure_url"],
+                "likes":0,
+                "comments":0        
+                }
+        else:
+            user_posts_saved = {
+                "_id":uuid.uuid4().hex,
+                "name":str(session['user']['name']),
+                "email":str(session['user']['email']),
+                "phone":str(session['user']['phone']),
+                "date":str(date_today),
+                "time":str(time_now),
+                "title":user_blog["title"],
+                "blog":user_blog["blog"],
+                "img":user_blog['img'],
+                "likes":0,
+                "comments":0        
+                }
+                
+        if db1.Posts.find_one({"_id":user_blog["_id"]}):
+            db1.Posts.delete_one({"_id":user_blog["_id"]})
+            db1.Saved_posts.insert_one(user_posts_saved)
+            nosb = db1.Login.find_one({'name':session['user']['name']})['saved_blogs']
+            nob = db1.Login.find_one({'name':session['user']['name']})['submitted_blogs']
+            if db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}}) and db1.Login.update_many({'name':session['user']['name']},{"$set":{"submitted_blogs": nob-1}}):
+                return "success"
+        elif db1.Saved_posts.find_one({"_id":user_blog["_id"]}):
+            print("FOUND IN SAVED!")
+            del user_posts_saved["_id"]
+            if db1.Saved_posts.update_one({"_id":user_blog["_id"]},{"$set":user_posts_saved }):
+                return "success"
+        return "failed"       
+
+        db1.Saved_posts.insert_one(user_posts_saved)
+        nosb = db1.Login.find_one({'name':session['user']['name']})['saved_blogs']
+        if db1.Login.update_many({'name':session['user']['name']},{"$set":{"saved_blogs": nosb+1}}):
+            return "success"
+        return "failed;"
+
+    

@@ -32,9 +32,9 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/home#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
                         <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
                         <li class="nav-item">
@@ -104,7 +104,7 @@
                             <div>
                                 <div class="photo-container">
                                     <div>
-                                        <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                        <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
                                     </div>
                                 </div>
                             </div>
@@ -113,10 +113,10 @@
                     </div>
                     
                     <div class="child-div-profile-2">
-                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.name }}</h1>
+                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.full_name }}</h1>
                         <ul class="list-inline mb-0" style="text-align:left; padding-top:1vh;">
                             <li class="list-inline-item">
-                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Photos</small>
+                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-blog mr-1"></i>Blogs</small>
                             </li>
                             <li class="list-inline-item">
                                 <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.followers }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>

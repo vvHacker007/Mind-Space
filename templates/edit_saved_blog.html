@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:1000,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:1000,1000,1000italic,1000italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- Third party plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+    <!--Post section Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!---Search Bar-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <title>Mind Space - {{ user_post.name }}</title>
+    <!-- Core theme CSS -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/write_post.css') }}"/>
+</head>
+
+<body id="page-top">
+    <div class="navigation">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/{{ user_post.name }}/home">Mind Space</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="/{{ user_post.name }}/home#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user_post.name }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ user_post.name }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item">
+                            <div class="search-box">
+                                <input type="text" placeholder="Search...">
+                                <div class="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="cancel-icon">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <div class="search-data">
+                                </div>
+                            </div>
+                            <script>
+                                const searchBox = document.querySelector(".search-box");
+                                const searchBtn = document.querySelector(".search-icon");
+                                const cancelBtn = document.querySelector(".cancel-icon");
+                                const searchInput = document.querySelector("input");
+                                const searchData = document.querySelector(".search-data");
+                                searchBtn.onclick = () => {
+                                    searchBox.classList.add("active");
+                                    searchBtn.classList.add("active");
+                                    searchInput.classList.add("active");
+                                    cancelBtn.classList.add("active");
+                                    searchInput.focus();
+                                    if (searchInput.value != "") {
+                                        var values = searchInput.value;
+                                        searchData.classList.remove("active");
+                                        searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                    } else {
+                                        searchData.textContent = "";
+                                    }
+                                }
+                                cancelBtn.onclick = () => {
+                                    searchBox.classList.remove("active");
+                                    searchBtn.classList.remove("active");
+                                    searchInput.classList.remove("active");
+                                    cancelBtn.classList.remove("active");
+                                    searchData.classList.toggle("active");
+                                    searchInput.value = "";
+                                }
+                            </script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="posts-container">
+        <div class="content-section">
+            <form id="myform" method="POST" action="" enctype="multipart/form-data">
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">{{ legend }}</legend>
+                    <div class="form-group">
+                        <h2><label class="form-control-label">Title</label></h2>
+                        <input name="title_text" type="text" class="form-control form-control-lg is-valid" id="clear_title_input" required minlength="5" maxlength="100" value='{{ user_post.title }}'>
+                    </div>
+                    <div class="form-group">
+                        <h2><label class="form-control-label">Content</label></h2>
+                        <div class="grow-wrap">
+                            <textarea name="blog_text" class="form-control form-control-lg is-valid expand" id="clear_content_input" onInput="this.parentNode.dataset.replicatedValue = this.value" required minlength="300">{{ user_post.blog }}</textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="row py-4">
+                    <div class="col-lg-6 mx-auto">
+                        <!-- Upload image input-->
+                        <div class="shadow-class">
+                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                <input name="blog_file" id="upload" type="file" onchange="readURL(this);", class="form-control border-0">
+                                <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                                <div class="input-group-append">
+                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload-alt mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                                </div>
+                            </div>
+                        </div>
+                        {% if user_post.img %}
+                        <div class="image-area mt-4"><img id="imageResult" src={{ user_post.img }} alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        {% else %}
+                        <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+            <div class="form-group-outside">
+                <input type="submit" class="btn btn-outline-info" form="myform" value="Post" name="post_blog"> <input type="submit" class="btn btn-outline-success" form="myform" value="Save" name="save_blog"> <button class="btn btn-outline-danger" id="discard-button">Discard</button>
+            </div>   
+        </div>
+    </div>
+    
+    <!-- Bootstrap core JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.7.1/dist/sweetalert2.all.min.js" integrity="sha256-1pZ3aajcQuFEOG/veUw/WxQjAMJiCSTZo8wH+opDplY=" crossorigin="anonymous"></script>
+    <script>
+        var discard_button = document.getElementById("discard-button");
+        discard_button.onclick = function(){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!',
+            timer: 5000
+            }).then((result) => {
+                if (result.value) 
+                {
+                    Swal.fire(
+                      'Deleted!',
+                      'Your blog has been removed.',
+                      'success',
+                      ).then(function(){
+                        window.location = '/saved/{{ user_post._id }}/delete/';
+                      })}
+                })
+            }
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+        
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+    
+        var input = document.getElementById( 'upload' );
+        var infoArea = document.getElementById( 'upload-label' );
+        
+        input.addEventListener( 'change', showFileName );
+        function showFileName( event ) {
+          var input = event.srcElement;
+          var fileName = input.files[0].name;
+          var length = 10;
+          var trimmedName = fileName.length > length ? fileName.substring(0, length - 3) + "..." + fileName.substring(fileName.length-4,fileName.length): fileName;
+          infoArea.textContent = 'File name: ' + trimmedName;
+        }
+    </script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../static/js/home.js"></script>
+</body>
+
+</html>

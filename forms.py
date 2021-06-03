@@ -43,3 +43,27 @@ class ResetPassForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_pass = PasswordField('Confirm Password',validators=[DataRequired()])
     submit = SubmitField("Change Password")
+
+def string_length_check(form,field):
+    if len(field.data) >= 100:
+        raise ValidationError('Field must contain less than 100 words.')
+
+class EditProfileForm(FlaskForm):
+    file = FileField('Profile Pic')
+    user_fullname = StringField('Full Name')
+    new_email = StringField('Email-Id')
+    new_phone = StringField('Phone No.')
+    new_birthdate = StringField('Birth Date')
+    new_username = StringField('Username')
+    new_about_me = StringField('About',validators=[string_length_check])
+    new_password = PasswordField('Enter New Password')
+    re_new_password = PasswordField('Re-Type New Password')  
+    submit = SubmitField("Update") 
+
+
+# class EditBlogForm(FlaskForm):
+#     title = StringField('Title', validators=[DataRequired(),Length(min=5,max=100)])
+#     content = TextAreaField('Blog', validators=[DataRequired(),Length(min=300)])
+#     file = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'gif', 'jpeg'], 'Images only!')])
+#     submit = SubmitField('Post')
+#     save = SubmitField('Save')
