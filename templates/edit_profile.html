@@ -294,12 +294,12 @@
                 {
                     Swal.fire(
                       'Discarded!',
-                      'Your blog has been discarded.',
+                      'Your changes have been discarded.',
                       'success',
                       ).then(function() {
                         document.getElementsByClassName("form-control").value = "";
                     }).then(function(){
-                        window.location = 'http://127.0.0.1:5000/{{ user.name }}/profile/';
+                        window.location = '/{{ user.name }}/profile/';
                       })}
                 })
             }
