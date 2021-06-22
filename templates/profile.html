@@ -21,22 +21,22 @@
     <!-- Core theme CSS -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}"/>
     <!-- Favicon-->
-    <link rel="icon" type="image/png" href="../static/Images/Icons/logo_3.ico"/>
+    <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
 </head>
 
 <body id="page-top" style="overflow-x:hidden !important;">
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
-                <a class="navbar-brand" href="/{{ user.name }}/home">Mind Space</a>
+                <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/home#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -65,6 +65,7 @@
                                         var values = searchInput.value;
                                         searchData.classList.remove("active");
                                         searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                        window.location = "/search/"+values;
                                     } else {
                                         searchData.textContent = "";
                                     }
@@ -92,11 +93,11 @@
                 <div class="parent-div-profile" style="background-color: #171717; height:fit-content;">
                     <div class="child-div-profile-1">
                         <div class="media align-items-end profile-head">
-                            {% if user.profile_pic=="None" %}
+                            {% if user.profile_pic=="" %}
                             <div>
                                 <div class="photo-container">
                                     <div>
-                                        <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                        <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798507/profile-user_xroad2.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
                                         <div class="middle">
                                             <div class="text">Upload Photo</div>
                                         </div>
@@ -153,7 +154,7 @@
                 <br>
                 <div class="py-4 px-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">Published Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                        <h5 class="mb-0">Published Blogs ({{ user.submitted_blogs }})</h5>
                     </div>
                     <div class="row">
                         {% for post in posts %}
@@ -174,7 +175,7 @@
                         {% endfor %}
                     </div>
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">Saved Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                        <h5 class="mb-0">Saved Blogs ({{ user.saved_blogs }})</h5>
                     </div>
                     <div class="row">
                         {% for post in saved_posts %}

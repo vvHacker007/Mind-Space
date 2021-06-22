@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /> -->
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Mind Space - {{ user.name }}</title>
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Favicon-->
+  <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
+  <!-- Font Awesome icons (free version)-->
+  <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+  <!-- Google fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:1000,700" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:1000,1000,1000italic,1000italic,700,700italic" rel="stylesheet" type="text/css" />
+  <!-- Third party plugin CSS-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+  <!---Search Bar-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <!-- Core theme CSS -->
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}"/>
+</head>
+<body>
+  <div class="navigation">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto my-2 my-lg-0">
+            <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
+            <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+            <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
+            <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
+            <li class="nav-item">
+              <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <div class="search-icon">
+                  <i class="fas fa-search"></i>
+                </div>
+                <div class="cancel-icon">
+                  <i class="fas fa-times"></i>
+                </div>
+                <div class="search-data">
+                </div>
+              </div>
+              <script>
+                const searchBox = document.querySelector(".search-box");
+                const searchBtn = document.querySelector(".search-icon");
+                const cancelBtn = document.querySelector(".cancel-icon");
+                const searchInput = document.querySelector("input");
+                const searchData = document.querySelector(".search-data");
+                searchBtn.onclick = () => {
+                    searchBox.classList.add("active");
+                    searchBtn.classList.add("active");
+                    searchInput.classList.add("active");
+                    cancelBtn.classList.add("active");
+                    searchInput.focus();
+                    if (searchInput.value != "") {
+                        var values = searchInput.value;
+                        searchData.classList.remove("active");
+                        searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                        window.location = "/search/"+values;
+                    } else {
+                        searchData.textContent = "";
+                    }
+                }
+                cancelBtn.onclick = () => {
+                    searchBox.classList.remove("active");
+                    searchBtn.classList.remove("active");
+                    searchInput.classList.remove("active");
+                    cancelBtn.classList.remove("active");
+                    searchData.classList.toggle("active");
+                    searchInput.value = "";
+                }
+              </script>
+            </li>
+          </ul>
+        </div>`
+      </div>
+    </nav>
+  </div>
+  <div id="snippetContent" style="padding-top:10rem;">
+    <div class="container">
+      <div class="row gutters-sm">
+        <div class="col-md-4 d-none d-md-block">
+          <div class="card">
+            <div class="card-body">
+              <nav class="nav flex-column nav-pills nav-gap-y-1">
+                <a href="#profile" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user mr-2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile Information
+                </a>
+                <a href="#account" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings mr-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Account Settings
+                </a>
+                <a href="#security" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield mr-2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Security
+                </a>
+                <!-- <a href="#notification" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell mr-2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Notification
+                </a>
+                <a href="#billing" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card mr-2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Billing
+                </a> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header border-bottom mb-3 d-flex d-md-none">
+              <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
+                <li class="nav-item">
+                  <a href="#profile" data-toggle="tab" class="nav-link has-icon active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a>
+                </li>
+                <li class="nav-item">
+                  <a href="#account" data-toggle="tab" class="nav-link has-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></a>
+                </li>
+                <li class="nav-item">
+                  <a href="#security" data-toggle="tab" class="nav-link has-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></a>
+                </li>
+                <!-- <li class="nav-item">
+                  <a href="#notification" data-toggle="tab" class="nav-link has-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></a>
+                </li>
+                <li class="nav-item">
+                  <a href="#billing" data-toggle="tab" class="nav-link has-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></a>
+                </li> -->
+              </ul>
+            </div>
+            <div class="card-body tab-content">
+              <div class="tab-pane active" id="profile">
+                <h6>YOUR PROFILE INFORMATION</h6>
+                <hr>
+                <form method="POST" id="profile_form">
+                  <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" aria-describedby="fullNameHelp" placeholder="Enter your full name" value="{{ user.full_name }}">
+                    <small id="fullNameHelp" class="form-text text-muted">Your name may appear around here where you are mentioned. You can change or remove it at any time.</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="bio">Your Bio</label>
+                    <textarea class="form-control autosize" id="bio" name="bio" placeholder="Write something about yourself" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 62px;">{{ user.bio }}</textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="text" class="form-control" id="age" name="age" placeholder="Enter your Age" value="{{ years }} Years, {{ months }} Months, {{ days }} Days" >
+                  </div>
+                  <div class="form-group small text-muted">
+                    All of the fields on this page are optional and can be deleted at any time, and by filling them out, you're giving us consent to share this data wherever your user profile appears.
+                  </div>
+                  <input type="submit" name="update" class="btn btn-info" value="Update Profile" form="profile_form"/>
+                  <input type="submit" class="btn btn-light" name="reset" value="Cancel" form="profile_form"/>
+                </form>
+              </div>
+              <div class="tab-pane" id="account">
+                <h6>ACCOUNT SETTINGS</h6>
+                <hr>
+                <form method="POST" id="account_form">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp" placeholder="Enter your username" value="{{ user.name }}">
+                    <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username becomes available for anyone else to claim.</small>
+                  </div>
+                  <input type="submit" name="update_acc" class="btn btn-info" value="Update" form="account_form"/>
+                  <hr>
+                  <div class="form-group">
+                    <label class="d-block text-danger">Delete Account</label>
+                    <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
+                  </div>
+                  <input type="submit" name="deleteacc" class="btn btn-danger" value="Delete Account" form="account_form"/>
+                  <div>
+                    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                    <p class="flash-alert-{{ category }}">{{ msg }}</p>
+                    {% endfor %} {% endif %} {% endwith %}
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane" id="security">
+                <h6>SECURITY SETTINGS</h6>
+                <hr>
+                <form method="POST" id="security_form_pass">
+                  <div class="form-group">
+                    <label class="d-block">Change Password</label>
+                    <input type="password" class="form-control mt-1" placeholder="New password" name="new_pass">
+                    <input type="password" class="form-control mt-1" placeholder="Confirm new password" name="confirm_new_pass">
+                  </div>
+                  <input type="submit" name="update_pass" class="btn btn-info" value="Change Password" form="security_form_pass"/>
+                  <div>
+                    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,msg in messages %}
+                    <p class="flash-alert-{{ category }}">{{ msg }}</p>
+                    {% endfor %} {% endif %} {% endwith %}
+                  </div>
+                </form>
+                <hr>
+                <form method="POST" id="security_form_auth">
+                  <div class="form-group">
+                    <label class="d-block">Two Factor Authentication</label>
+                    {% if user.two_factor_auth==True %}
+                    <input type="submit" name="disable_two_factor_auth" class="btn btn-info" value="Disable two-factor authentication" form="security_form_auth"/>
+                    {% else %}
+                    <input type="submit" name="two_factor_auth" class="btn btn-info" value="Enable two-factor authentication" form="security_form_auth"/>
+                    {% endif %}
+                    <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
+                  </div>
+                </form>
+                <!-- <hr>
+                <form>
+                  <div class="form-group mb-0">
+                    <label class="d-block">Sessions</label>
+                    <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.</p>
+                    <ul class="list-group list-group-sm">
+                      <li class="list-group-item has-icon">
+                        <div>
+                          <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
+                          <small class="text-muted">Your current session seen in United States</small>
+                        </div>
+                        <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
+                      </li>
+                    </ul>
+                  </div>
+                </form> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</body>
+</html>

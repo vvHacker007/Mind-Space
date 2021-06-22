@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -31,10 +31,10 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link" href="#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -63,7 +63,9 @@
                                         var values = searchInput.value;
                                         searchData.classList.remove("active");
                                         searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
-                                    } else {
+                                        window.location = "/search/"+values;
+                                    }
+                                    else {
                                         searchData.textContent = "";
                                     }
                                 }

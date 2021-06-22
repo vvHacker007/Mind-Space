@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -26,15 +26,15 @@
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
-                <a class="navbar-brand" href="#page-top">Mind Space</a>
+                <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link" href="/#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ user.name }}/profile/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -63,6 +63,7 @@
                                         var values = searchInput.value;
                                         searchData.classList.remove("active");
                                         searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                        window.location = "/search/"+values;
                                     } else {
                                         searchData.textContent = "";
                                     }
@@ -94,11 +95,11 @@
                                         <div class="user-profile">
                                             <div class="child-div-profile-1">
                                                 <div class="media align-items-end profile-head">
-                                                    {% if user.profile_pic=="None" %}
+                                                    {% if user.profile_pic=="" %}
                                                     <div>
                                                         <div class="photo-container">
                                                             <div>
-                                                                <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                                                <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798507/profile-user_xroad2.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
                                                                 <div class="middle">
                                                                     <div class="text">Upload Photo</div>
                                                                 </div>
@@ -123,9 +124,9 @@
                                                 </div>
                                             </div>
                                             {% if user.full_name %}
-                                            <h5 class="user_full_name"style="text-align: center !important;">{{ user.full_name }}</h5>
+                                            <h5 class="user_full_name" style="position:relative !important; text-align: center !important;">{{ user.full_name }}</h5>
                                             {% else %}
-                                            <h5 class="user_full_name" style="text-align: center !important;">{{ user.name }}</h5>
+                                            <h5 class="user_full_name" style="position:relative !important; text-align: center !important;">{{ user.name }}</h5>
                                             {% endif %}
                                             <h6 class="user_name" style="text-align: center !important;">@{{ user.name }}</h6>
                                         </div>

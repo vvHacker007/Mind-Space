@@ -21,10 +21,10 @@
     <!-- Core theme CSS -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}"/>
     <!-- Favicon-->
-    <link rel="icon" type="image/png" href="../static/Images/Icons/logo_3.ico"/>
+    <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="overflow-x: hidden;">
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
@@ -36,7 +36,7 @@
                         <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
                         <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/settings/">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -65,6 +65,7 @@
                                         var values = searchInput.value;
                                         searchData.classList.remove("active");
                                         searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                        window.location = "/search/"+values;
                                     } else {
                                         searchData.textContent = "";
                                     }
@@ -94,7 +95,7 @@
                         <h1 align=center>{{ user_post.title }}</h1>
                         <div class="post_profile">
                             <div class="post_profile_user">
-                                <img src="{{ user.profile_pic }}" alt="Profile Photo" class="profile-photo" id="wizardPicturePreview" style="background-color:green; border: 2px solid green; border-radius: 50%;">
+                                <img src="{{ user.profile_pic }}" alt="Profile Photo" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid green; border-radius: 50%;">
                                 <a href="/{{ user.name }}/profile/"><h4>{{ user.name }}</h4></a>
                             </div>
                             <div class="post_profile_date">
@@ -103,7 +104,7 @@
                         </div>
                     </div>
                     {% if user_post.img %}
-                    <img src={{ user_post.img }} style="max-width: 100%; height:auto; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh; padding-left: 15vw; padding-right: 15vw;">
+                    <img src="{{ user_post.img }}" style="max-width: 100%; height:auto; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh; padding-left: 15vw; padding-right: 15vw;">
                     {% endif %}
                     <div class="text_font_size" id="a_href_new_link" style="padding-left:5vw; padding-right: 5vw; padding-bottom: 15vh;">{{ user_post["blog"] | safe }}</div>
                     <div class="edit_discard_btn">

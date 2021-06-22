@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -31,9 +31,9 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">Login</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#stats">Stories</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#stats">Stories</a></li> -->
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
                         <li class="nav-item">
                             <div class="search-box">
@@ -63,6 +63,7 @@
                                         var values = searchInput.value;
                                         searchData.classList.remove("active");
                                         searchData.innerHTML = "You just typed " + "<span style='font-weight: 500;'>" + values + "</span>";
+                                        window.location = "/search/"+values;
                                     } else {
                                         searchData.textContent = "";
                                     }
@@ -150,7 +151,7 @@
             </div>
         </section>
         <!--Popular Stories-->
-        <div id="stats">
+        <!-- <div id="stats">
             <div class="breaker2"></div>
             <div class="container-fluid p-0">
                 <h2 class="text-center mt-0">Sample Blogs</h2>
@@ -212,7 +213,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Call to action-->
         <section class="page-section bg-dark text-white">
             <div class="container text-center">

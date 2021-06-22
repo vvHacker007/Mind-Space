@@ -42,7 +42,7 @@ class ForgotPassForm(FlaskForm):
 class ResetPassForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_pass = PasswordField('Confirm Password',validators=[DataRequired()])
-    submit = SubmitField("Change Password")
+    submit = SubmitField("Change")
 
 def string_length_check(form,field):
     if len(field.data) >= 100:

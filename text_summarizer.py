@@ -3,6 +3,8 @@ import nltk
 import heapq 
 
 def summarize(article):
+    nltk.download('punkt')
+    nltk.download('stopwords')
     article = re.sub(r'\[[0-9]*\]', ' ', article)
     article = re.sub(r'\s+', ' ', article)
     formatted_article = re.sub('[^a-zA-Z]', ' ', article)

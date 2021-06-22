@@ -17,26 +17,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!---Search Bar-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <title>Mind Space - {{ user.name }}</title>
+    <title>Mind Space - Search</title>
     <!-- Core theme CSS -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}"/>
     <!-- Favicon-->
     <link rel="icon" href="https://res.cloudinary.com/dq84d1ar3/image/upload/v1624302175/MindSpace/logo_transparent_new_o1z8ln.png">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="overflow-x:hidden !important;">
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
-                <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
+                <a class="navbar-brand" href="/">Mind Space</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/login/">Login</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/signup/">Signup</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -85,90 +83,111 @@
             </div>
         </nav>
     </div>
-    <div class="row py-5 px-4" style="position: relative; padding-top: 10rem !important;">
-        <div class="col-md-12 mx-auto">
-            <!-- Profile widget -->
-            <div class="bg-white shadow rounded overflow-hidden">
-                
-                <div class="parent-div-profile" style="background-color: #171717; height:fit-content;">
-                    <div class="child-div-profile-1">
-                        <div class="media align-items-end profile-head">
-                            {% if user.profile_pic=="None" %}
-                            <div>
-                                <div class="photo-container">
-                                    <div>
-                                        <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
-                                    </div>
+    <div class="content" style="position:relative; padding-top:5rem;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="search-result-box card-box">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <div class="pt-3 pb-4">
+                                    <div class="mt-4 text-center">
+                                        <h4>Search Results For "{{ data }}"</h4></div>
                                 </div>
                             </div>
-                            {% else %}
-                            <div>
-                                <div class="photo-container">
-                                    <div>
-                                        <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
                         </div>
-                        {% if followed==False %}
-                        <div style="padding-top:2vh; padding-right:4rem;"><a href="/{{ user.name }}/follow/"><button class="edit-btn-background edit-btn">Follow</button></a></div>
-                        {% elif followed==True %}
-                        <div style="padding-top:2vh; padding-right:4rem;"><a href="/{{ user.name }}/unfollow/"><button class="edit-btn-background edit-btn">Unfollow</button></a></div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="child-div-profile-2">
-                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.full_name }}</h1>
-                        <ul class="list-inline mb-0" style="text-align:left; padding-top:1vh;">
-                            <li class="list-inline-item">
-                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-blog mr-1"></i>Blogs</small>
-                            </li>
-                            <li class="list-inline-item">
-                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.followers }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
-                            </li>
-                            <li class="list-inline-item">
-                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.following }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small>
-                            </li>
+                        <!-- end row -->
+                        <ul class="nav nav-tabs tabs-bordered">
+                            <li class="nav-item"><a href="#all" data-toggle="tab" aria-expanded="true" class="nav-link active">All results <span class="badge badge-success ml-1">{{ len_users + len_posts }}</span></a></li>
+                            <li class="nav-item"><a href="#users" data-toggle="tab" aria-expanded="false" class="nav-link">Users <span class="badge badge-danger ml-1">{{ len_users }}</span></a></li>
+                            <li class="nav-item"><a href="#posts" data-toggle="tab" aria-expanded="false" class="nav-link">Blogs <span class="badge badge-danger ml-1">{{ len_posts }}</span></a></li>
                         </ul>
-                    </div>
-                
-                </div>
-                {% if user.bio %}
-                <div class="px-4 py-3">
-                    <h5 class="mb-0">Bio</h5>
-                    <div class="p-4 rounded shadow-sm bg-light">
-                        <p class="font-italic mb-0">{{ user.bio }}</p>
-                    </div>
-                </div>
-                {% endif %}
-                <br>
-                <div class="py-4 px-4">
-                    <!-- <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">Recent Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
-                    </div> -->
-                    <div class="row">
-                        {% for post in posts %}
-                        <a href="/blog/{{ post._id }}">
-                            <div class="div-card">
-                                <div class="img-title">
-                                    <h4><b>{{ post.title }}</b></h4>
-                                    <img src={{ post.img }}>
-                                </div>
-                                <div class="summary-text">
-                                    <p>{{ post.summary }}</p>
-                                    <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
-                                        <br>
-                                    <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="all">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for post in posts_data %}
+                                        <a href="/blog/{{ post._id }}">
+                                            <div class="search-item">
+                                                <div class="img-title">
+                                                    <h4><b>{{ post.title }}</b></h4>
+                                                    <img src={{ post.img }}>
+                                                </div>
+                                                <div class="summary-text">
+                                                    <p>{{ post.summary }}</p>
+                                                    <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
+                                                        <br>
+                                                    <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                        {% for user in users_data %}
+                                        <a href="/{{ user.name }}/profile">
+                                            <div class="search-item">
+                                                <div class="img-title">
+                                                    <h4><b>{{ user.name }}</b></h4>
+                                                    <img src="{{ user.profile_pic }}">
+                                                </div>
+                                                <div class="summary-text">
+                                                    <p>{{ user.bio }}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </a>
-                        {% endfor %}
+                            <!-- end All results tab -->
+                            <!-- Users tab -->
+                            <div class="tab-pane" id="users">
+                                {% for user in users_data %}
+                                <a href="/{{ user.name }}/profile">
+                                    <div class="search-item">
+                                        <div class="img-title">
+                                            <h4><b>{{ user.name }}</b></h4>
+                                            <img src="{{ user.profile_pic }}">
+                                        </div>
+                                        <div class="summary-text">
+                                            <p>{{ user.bio }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- end Users tab -->
+                            <!-- Posts tab -->
+                            <div class="tab-pane" id="posts">
+                                {% for post in posts_data %}
+                                <a href="/blog/{{ post._id }}">
+                                    <div class="search-item">
+                                        <div class="img-title">
+                                            <h4><b>{{ post.title }}</b></h4>
+                                            <img src={{ post.img }}>
+                                        </div>
+                                        <div class="summary-text">
+                                            <p>{{ post.summary }}</p>
+                                            <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
+                                                <br>
+                                            <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- end Posts tab -->
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- end row -->
         </div>
-    </div>    <!-- Bootstrap core JS-->
+        <!-- container -->
+    </div>
+    <!-- Bootstrap core JS-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!---Search Bar-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <title>Mind Space - {{ user_post.title }}</title>
+    <title>Mind Space - {{ user.name }}</title>
     <!-- Core theme CSS -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/user_home.css') }}"/>
     <!-- Favicon-->
@@ -28,15 +28,15 @@
     <div class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
-                <a class="navbar-brand" href="/{{ session['user']['name'] }}/home">Mind Space</a>
+                <a class="navbar-brand" href="/">Mind Space</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/home#blogs">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/write/">Write</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/profile/">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/logout/">Log Out</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/{{ session['user']['name'] }}/settings">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login/">Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login/">Write</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login/">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login/">Log In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/signup/">Sign Up</a></li>
                         <li class="nav-item">
                             <div class="search-box">
                                 <input type="text" placeholder="Search...">
@@ -90,30 +90,75 @@
             <!-- Profile widget -->
             <div class="bg-white shadow rounded overflow-hidden">
                 
-                <div style="background-color: white; height:fit-content;">
-                    <div class="text_font_size">
-                        <h1 align=center>{{ user_post.title }}</h1>
-                        <div class="post_profile">
-                            <div class="post_profile_user">
-                                <img src="{{ user.profile_pic }}" alt="Profile Photo" class="profile-photo" id="wizardPicturePreview" style="background-color:green; border: 2px solid green; border-radius: 50%;">
-                                <a href="/{{ user.name }}/profile/"><h4>{{ user.name }}</h4></a>
+                <div class="parent-div-profile" style="background-color: #171717; height:fit-content;">
+                    <div class="child-div-profile-1">
+                        <div class="media align-items-end profile-head">
+                            {% if user.profile_pic=="None" %}
+                            <div>
+                                <div class="photo-container">
+                                    <div>
+                                        <img src="https://res.cloudinary.com/dq84d1ar3/image/upload/v1620798740/MindSpace/profile-user_ofw9zu.png" alt="Profile Photo" width="130" height="130" class="profile-photo" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="post_profile_date">
-                                <h5>Last Modified @{{ user_post.date }}</h5>
+                            {% else %}
+                            <div>
+                                <div class="photo-container">
+                                    <div>
+                                        <img src="{{ user.profile_pic }}" alt="Profile Photo" width="130" height="130" id="wizardPicturePreview" style="background-color:white; border: 2px solid white; border-radius: 50%;">
+                                    </div>
+                                </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% if user_post.img %}
-                    <img src={{ user_post.img }} style="max-width: 100%; height:auto; display: block; margin-left: auto; margin-right: auto; padding-top:10vh; padding-bottom:10vh; padding-left: 15vw; padding-right: 15vw;">
-                    {% endif %}
-                    <div class="text_font_size" id="a_href_new_link" style="padding-left:5vw; padding-right: 5vw; padding-bottom: 15vh;">{{ user_post["blog"] | safe }}</div>
-                    <div class="edit_discard_btn">
-                        <div style="padding-right:1vw;">
-                            <a href="/saved/{{ user_post._id }}/edit/"><button class="edit_blog_btn">Edit</button></a>
-                        </div> 
-                        <div style="padding-right:10vw;">
-                            <button id="delete_btn_redirect" class="delete_blog_btn">Delete</button>
-                        </div>
+                    
+                    <div class="child-div-profile-2">
+                        <h1 style="color:white; font-size: 6vh; text-align:left;">{{ user.full_name }}</h1>
+                        <ul class="list-inline mb-0" style="text-align:left; padding-top:1vh;">
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.submitted_blogs }}</h5><small class="text-muted"> <i class="fas fa-blog mr-1"></i>Blogs</small>
+                            </li>
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.followers }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
+                            </li>
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block" style="color:white !important;">{{ user.following }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small>
+                            </li>
+                        </ul>
+                    </div>
+                
+                </div>
+                {% if user.bio %}
+                <div class="px-4 py-3">
+                    <h5 class="mb-0">Bio</h5>
+                    <div class="p-4 rounded shadow-sm bg-light">
+                        <p class="font-italic mb-0">{{ user.bio }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                <br>
+                <div class="py-4 px-4">
+                    <!-- <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">Recent Blogs</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                    </div> -->
+                    <div class="row">
+                        {% for post in posts %}
+                        <a href="/blog/{{ post._id }}">
+                            <div class="div-card">
+                                <div class="img-title">
+                                    <h4><b>{{ post.title }}</b></h4>
+                                    <img src={{ post.img }}>
+                                </div>
+                                <div class="summary-text">
+                                    <p>{{ post.summary }}</p>
+                                    <p><small class="text-muted" style="position:relative; right:0;">~ {{ post.name }}</small>
+                                        <br>
+                                    <small class="text-muted"style="margin-right:15vw;">{{ post.date }}</small></p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -124,46 +169,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.7.1/dist/sweetalert2.all.min.js" integrity="sha256-1pZ3aajcQuFEOG/veUw/WxQjAMJiCSTZo8wH+opDplY=" crossorigin="anonymous"></script>
     <script>
-        window.onload=setupLinks;
-        function setupLinks()
-        {
-            var webSites = document.getElementById("a_href_new_link");
-            if (webSites)
-            {
-                var links = webSites.getElementsByTagName("a");
-                var i, href, title;
-                for (i=0; i<links.length; i++)
-                {
-                    href = links[i].getAttribute("href");
-                    links[i].onclick = function(){window.open(href,'_blank'); return false;};
+        $(document).ready(function(){
+            // Prepare the preview for profile picture
+                $("#wizard-picture").change(function(){
+                    readURL(this);
+                });
+            });
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+            
+                    reader.onload = function (e) {
+                        $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow');
+                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
-            }	
-        }
-    </script>
-    <script>
-        var discard_button = document.getElementById("delete_btn_redirect");
-        discard_button.onclick = function(){
-            Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            timer: 5000
-            }).then((result) => {
-                if (result.value) 
-                {
-                    Swal.fire(
-                      'Deleted!',
-                      'Your blog has been deleted.',
-                      'success',
-                      ).then(function(){
-                        window.location = '/saved/{{ user_post._id }}/delete/';
-                      })}
-                })
             }
+            document.getElementById("wizard-picture").onchange = function() {
+                document.getElementById("form").submit();
+            };
     </script>
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
