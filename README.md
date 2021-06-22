@@ -1,2 +1,2 @@
 # Mind-Space
-Blogging Website for Geeks
+Blgging website to share one's thoughts 
