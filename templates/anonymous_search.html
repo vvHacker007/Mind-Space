@@ -130,7 +130,9 @@
                                                     <img src="{{ user.profile_pic }}">
                                                 </div>
                                                 <div class="summary-text">
+                                                    {% if user.bio %}
                                                     <p>{{ user.bio }}</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </a>

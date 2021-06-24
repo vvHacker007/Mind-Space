@@ -134,7 +134,9 @@
                                                 </div>
                                                 <div class="summary-text">
                                                     <p>Email: {{ user.email }}</p>
+                                                    {% if user.bio %}
                                                     <p>{{ user.bio }}</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </a>

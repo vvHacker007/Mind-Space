@@ -36,8 +36,6 @@ from user.models import User
 
 
 
-# def calling_func():
-# 	return "HELLO"
 
 # @app.context_processor
 # def context_processor():
