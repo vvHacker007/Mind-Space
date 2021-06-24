@@ -233,7 +233,7 @@ def user_home(user):
     
     # Check if the user is in session if any other user is in session then redirect to their homepage if noone is in the session then redirect to login page
     if 'user' in session and session['user']['name']==user:
-        posts = db1.Posts.find({}).sort("_id",-1)
+        posts = db1.Posts.find({}).sort("date",-1)
         return render_template("user_home.html",posts=posts,user=user)
     elif 'user' in session and session['user']['name']!=user:
         return redirect(url_for('user_home',user=session['user']['name']))
@@ -355,8 +355,8 @@ def user_profile(user):
 
         # Extracting User Data and Posts
         user_data = db2.Login.find_one({"name":user})
-        user_posts = db1.Posts.find({"email" : user_data["email"]})
-        saved_user_posts = db1.Saved_posts.find({"email" : session["user"]["email"]})
+        user_posts = db1.Posts.find({"email" : user_data["email"]}).sort("date",-1)
+        saved_user_posts = db1.Saved_posts.find({"email" : session["user"]["email"]}).sort("date",-1)
 
         app.logger.info('in upload route')
         cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), api_secret=os.getenv('API_SECRET'))
@@ -399,7 +399,7 @@ def user_profile(user):
 
         # Extracting User Data and Posts
         user_data = db2.Login.find_one({"name":user})
-        user_posts = db1.Posts.find({"email" : user_data["email"]})
+        user_posts = db1.Posts.find({"email" : user_data["email"]}).sort("date",-1)
         session_user_data = db2.Login.find_one({"name":session['user']['name']})
 
         if db2.Follow.find_one({"user_followed":user_data['_id'],"user":session_user_data['_id']}):
@@ -415,7 +415,7 @@ def user_profile(user):
 
         # Extracting User Data and Posts
         user_data = db2.Login.find_one({"name":user})
-        user_posts = db1.Posts.find({"email" : user_data["email"]})
+        user_posts = db1.Posts.find({"email" : user_data["email"]}).sort("date",-1)
         
         return render_template("no_user_profile.html",user=user_data,posts=user_posts)
         # return redirect(url_for('login'))
@@ -1136,13 +1136,13 @@ def search_data(data):
     if 'user' in session:
     
         # Extracting posts related to entered keyword
-        posts_title_data = db1.Posts.find({'title':{"$regex": data,'$options' : 'i'}})
-        posts_content_data = db1.Posts.find({'summary':{"$regex": data,'$options' : 'i'}})
+        posts_title_data = db1.Posts.find({'title':{"$regex": data,'$options' : 'i'}}).sort("date",-1)
+        posts_content_data = db1.Posts.find({'summary':{"$regex": data,'$options' : 'i'}}).sort("date",-1)
 
         # Extracting users with related keywords
-        users_name_data = db2.Login.find({'name':{"$regex": data,'$options' : 'i'}})
-        users_email_data = db2.Login.find({'email':{"$regex": data,'$options' : 'i'}})
-        user_full_name_data = db2.Login.find({'full_name':{"$regex": data,'$options' : 'i'}})
+        users_name_data = db2.Login.find({'name':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
+        users_email_data = db2.Login.find({'email':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
+        user_full_name_data = db2.Login.find({'full_name':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
 
         # Concating the data extracted 
         posts_data = [x for x in chain(posts_title_data,posts_content_data)]
@@ -1157,13 +1157,13 @@ def search_data(data):
     elif 'user' not in session:
         
         # Extracting posts related to entered keyword
-        posts_title_data = db1.Posts.find({'title':{"$regex": data,'$options' : 'i'}})
-        posts_content_data = db1.Posts.find({'summary':{"$regex": data,'$options' : 'i'}})
+        posts_title_data = db1.Posts.find({'title':{"$regex": data,'$options' : 'i'}}).sort("date",-1)
+        posts_content_data = db1.Posts.find({'summary':{"$regex": data,'$options' : 'i'}}).sort("date",-1)
 
         # Extracting users with related keywords
-        users_name_data = db2.Login.find({'name':{"$regex": data,'$options' : 'i'}})
-        users_email_data = db2.Login.find({'email':{"$regex": data,'$options' : 'i'}})
-        user_full_name_data = db2.Login.find({'full_name':{"$regex": data,'$options' : 'i'}})
+        users_name_data = db2.Login.find({'name':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
+        users_email_data = db2.Login.find({'email':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
+        user_full_name_data = db2.Login.find({'full_name':{"$regex": data,'$options' : 'i'}}).sort("joined_date",-1)
 
         # Concating the data extracted 
         posts_data = [x for x in chain(posts_title_data,posts_content_data)]
