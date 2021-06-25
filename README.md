@@ -44,7 +44,7 @@
  ```
  
  ```
- python app.py
+  ./run
  ```
  
  <div align="center">
