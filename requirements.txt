@@ -74,7 +74,7 @@ queuelib==1.6.1
 redis==3.5.3
 regex==2021.4.4
 requests==2.25.1
-Scrapy==2.5.0
+Scrapy==2.5.1
 service-identity==21.1.0
 simple-geoip==0.1.1
 six==1.16.0
