@@ -41,7 +41,7 @@ itsdangerous==2.0.1
 Jinja2==3.0.1
 jmespath==0.10.0
 joblib==1.0.1
-lxml==4.6.3
+lxml==4.6.5
 Markdown==3.3.4
 markdownify==0.8.0
 MarkupSafe==2.0.1
