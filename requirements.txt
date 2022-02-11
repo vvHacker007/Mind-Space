@@ -47,7 +47,7 @@ markdownify==0.8.0
 MarkupSafe==2.0.1
 more-itertools==8.8.0
 murmurhash==1.0.5
-nltk==3.6.2
+nltk==3.6.6
 numpy==1.20.3
 ordered-set==3.1.1
 ordered-set-stubs==0.1.3
