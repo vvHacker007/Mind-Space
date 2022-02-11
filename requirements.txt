@@ -84,7 +84,7 @@ srsly==1.0.5
 thinc==7.4.5
 tomlkit==0.5.11
 tqdm==4.61.0
-Twisted==21.2.0
+Twisted==22.1.0
 typing-extensions==3.10.0.0
 urllib3==1.26.5
 w3lib==1.22.0
