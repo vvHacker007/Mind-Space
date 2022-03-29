@@ -50,6 +50,9 @@
  <div align="center">
   Server starts running on port <strong>127.0.0.1:5000/🚀</strong>
  </div><br>
+
+## Application Demo
+https://user-images.githubusercontent.com/60468275/160607909-6026f880-d5a4-47f1-b101-a735e70d136d.mp4
  
 <div align="center">
   <img src="https://img.shields.io/badge/Contributors-black?logo=github&style=for-the-badge" />
@@ -94,4 +97,3 @@ Sujay Goswami
  <div align="center">
   <img src="https://img.shields.io/badge/Please%20star%20if%20you%20like%20it-gold?logo=Southwest%20Airlines&style=for-the-badge" width="300" height="35"/>
  </div>
- 
