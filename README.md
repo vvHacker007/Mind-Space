@@ -1,6 +1,6 @@
 <div align="center"> 
   <p align='center'> 
-   <a href="https://mindspace.cf"><img src="https://img.shields.io/badge/-%20%20Mind%20Space%20:%20mindspace.cf%20-darkgreen?style=for-the-badge" /></a>
+   <a href="https://www.mindspace.tk"><img src="https://img.shields.io/badge/-%20%20Mind%20Space%20:%20mindspace.tk%20-darkgreen?style=for-the-badge" /></a>
    <img src="https://forthebadge.com/images/badges/built-with-love.svg" />
    <img src="https://img.shields.io/badge/-By%20Vedansh%20-blue?style=for-the-badge" /><br>
    <img src="http://ForTheBadge.com/images/badges/made-with-python.svg" />
